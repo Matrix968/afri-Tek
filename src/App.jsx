@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-  useSpring,
-} from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import bgVideo from "./assets/bg-video.mp4";
 import Lenis from "lenis";
 import { useInView } from "react-intersection-observer";
@@ -36,12 +30,15 @@ import {
   HelpCircle,
   ChevronDown,
   Gift,
+  Menu,
+  X,
 } from "lucide-react";
 import afriTech from "./assets/afritek-logo.jpg";
 import afritech3d from "./assets/afritek-3d.gif";
 import afritech3d2 from "./assets/3dvideo.mp4";
 // Safe CJS/ESM interop import for react-countup in Vite
 import ReactCountUp from "react-countup";
+import { AnimatePresence } from "framer-motion";
 const CountUp = ReactCountUp.default || ReactCountUp;
 
 // --- DATA CONFIGURATIONS ---
@@ -202,6 +199,26 @@ export default function AfriTekbileLanding() {
     };
   }, []);
 
+  const [isActive, setIsActive] = useState(false);
+
+  const navLinks = [
+    {
+      name: "Vision",
+      href: "#about",
+    },
+    {
+      name: "Devices",
+      href: "#showcase",
+    },
+    {
+      name: "Ecosystem",
+      href: "#technology",
+    },
+    {
+      name: "Equity",
+      href: "#investment",
+    },
+  ];
   return (
     <div className="relative min-h-screen bg-[#030009] text-zinc-100 font-sans antialiased overflow-x-hidden selection:bg-amber-400 selection:text-black">
       {/* --- PREMIUM GOOGLE FONTS & WEBKIT 3D RENDERING SYSTEM --- */}
@@ -228,8 +245,8 @@ export default function AfriTekbileLanding() {
         .backface-hidden {
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
-        }
-      `}</style>
+          }
+          `}</style>
 
       {/* Ambient backgrounds */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
@@ -252,6 +269,85 @@ export default function AfriTekbileLanding() {
               </span>
             </div>
           </div>
+          <>
+            {/* Hamburger Button */}
+            <button
+              onClick={() => setIsActive(!isActive)}
+              className="md:hidden fixed top-5 right-5 z-[100] flex items-center justify-center w-11 h-11 rounded-full bg-zinc-900 hover:bg-amber-400 transition-all duration-300"
+            >
+              <AnimatePresence mode="wait">
+                {isActive ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -180, scale: 0 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    exit={{ rotate: 180, scale: 0 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <X className="text-white" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 180, scale: 0 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    exit={{ rotate: -180, scale: 0 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <Menu className="text-white" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* Mobile Menu */}
+            <AnimatePresence>
+              {isActive && (
+                <>
+                  {/* Backdrop */}
+                  <motion.div
+                    onClick={() => setIsActive(false)}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80]"
+                  />
+
+                  {/* Menu */}
+                  <motion.div
+                    initial={{ x: "100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "100%" }}
+                    transition={{
+                      duration: 0.45,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="fixed top-0 right-0 w-72 h-screen bg-zinc-950 border-l border-zinc-800 z-[90] flex flex-col pt-28 px-8 gap-4"
+                  >
+                    {navLinks.map((link, index) => (
+                      <motion.a
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setIsActive(false)}
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: index * 0.08,
+                        }}
+                        className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 px-5 py-4 text-lg font-medium text-white hover:bg-amber-400 hover:text-black transition-all duration-300"
+                      >
+                        {link.name}
+
+                        <motion.span whileHover={{ x: 5 }} className="text-xl">
+                          →
+                        </motion.span>
+                      </motion.a>
+                    ))}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </>
           <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-zinc-400">
             <a href="#about" className="hover:text-amber-400 transition-colors">
               Vision
@@ -551,7 +647,8 @@ export default function AfriTekbileLanding() {
                 <Mail className="w-4 h-4 text-amber-500" /> core@AfriTektech.com
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-amber-500" /> +234 (0) 800-AfriTek
+                <Phone className="w-4 h-4 text-amber-500" /> +234 (0)
+                800-AfriTek
               </li>
               <li className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-amber-500" /> Tech Enclave,
