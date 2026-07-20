@@ -433,7 +433,7 @@ export default function AfriTekbileLanding() {
           </div>
 
           <div className="lg:col-span-5 flex justify-center">
-            <img src={afritech3d} alt="" className="h-150 w-200" />
+            <img src={afritech3d} alt="" loading="lazy" className="h-150 w-200" />
           </div>
         </div>
       </section>
