@@ -249,23 +249,20 @@ export default function AfriTekbileLanding() {
           `}</style>
 
       {/* Ambient backgrounds */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute top-[25%] right-1/4 w-[700px] h-[700px] bg-gradient-to-bl from-purple-500/5 to-transparent rounded-full blur-[200px] pointer-events-none" />
-      <div className="absolute bottom-[15%] left-1/3 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-150 h-150 bg-linear-to-tr from-amber-500/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-[25%] right-1/4 w-175 h-175 bg-linear-to-bl from-purple-500/5 to-transparent rounded-full blur-[200px] pointer-events-none" />
+      <div className="absolute bottom-[15%] left-1/3 w-125 h-125 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       {/* --- HEADER --- */}
-      <header className="fixed w-full top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-white/[0.06]">
+      <header className="fixed w-full top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-white/6">
         <div className="container mx-auto px-6 lg:px-16 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-linear-to-br from-amber-400 to-amber-600 text-black p-2.5 rounded-xl shadow-lg shadow-amber-500/10">
-              <img src={afriTech} alt="" className="w-10 h-8" />
+              <img src={afriTech} alt="" className="w-10 h-8 rounded-md" />
             </div>
             <div>
-              <span className="font-display font-bold text-lg tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
+              <span className="font-display font-bold text-lg tracking-wider bg-clip-text text-transparent bg-linear-to-r from-white via-zinc-200 to-zinc-400">
                 AfriTek
-              </span>
-              <span className="text-[10px] block text-amber-500 font-bold tracking-[0.3em] leading-none mt-1">
-                TECHNOLOGIES
               </span>
             </div>
           </div>
@@ -273,7 +270,7 @@ export default function AfriTekbileLanding() {
             {/* Hamburger Button */}
             <button
               onClick={() => setIsActive(!isActive)}
-              className="md:hidden fixed top-5 right-5 z-[100] flex items-center justify-center w-11 h-11 rounded-full bg-zinc-900 hover:bg-amber-400 transition-all duration-300"
+              className="md:hidden fixed top-5 right-5 z-100 flex items-center justify-center w-11 h-11 rounded-full bg-zinc-900 hover:bg-amber-400 transition-all duration-300"
             >
               <AnimatePresence mode="wait">
                 {isActive ? (
@@ -310,7 +307,7 @@ export default function AfriTekbileLanding() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80]"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-80"
                   />
 
                   {/* Menu */}
@@ -322,7 +319,7 @@ export default function AfriTekbileLanding() {
                       duration: 0.45,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="fixed top-0 right-0 w-72 h-screen bg-zinc-950 border-l border-zinc-800 z-[90] flex flex-col pt-28 px-8 gap-4"
+                    className="fixed top-0 right-0 w-72 h-screen bg-zinc-950 border-l border-zinc-800 z-90 flex flex-col pt-28 px-8 gap-4"
                   >
                     {navLinks.map((link, index) => (
                       <motion.a
@@ -373,7 +370,7 @@ export default function AfriTekbileLanding() {
           </nav>
           <a
             href="#investment"
-            className="hidden lg:flex items-center gap-2 bg-white/[0.04] hover:bg-white/[0.08] text-white font-bold px-6 py-3 rounded-xl border border-white/[0.08] shadow-sm transition-all text-xs tracking-wider uppercase"
+            className="hidden lg:flex items-center gap-2 bg-white/4 hover:bg-white/8 text-white font-bold px-6 py-3 rounded-xl border border-white/8 shadow-sm transition-all text-xs tracking-wider uppercase"
           >
             Acquire Shares <ArrowUpRight className="w-4 h-4" />
           </a>
@@ -395,7 +392,7 @@ export default function AfriTekbileLanding() {
             Your browser does not support the video tag.
           </video>
           {/* Advanced Dark Masking for readability and high tech depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#030009]/30 via-[#030009]/80 to-[#030009]" />
+          <div className="absolute inset-0 bg-linear-to-b from-[#030009]/30 via-[#030009]/80 to-[#030009]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#030009_95%)]" />
         </div>
 
@@ -409,7 +406,7 @@ export default function AfriTekbileLanding() {
             </div>
             <h1 className="font-display text-4xl sm:text-6xl lg:text-[76px] font-bold leading-[1.05] tracking-tight text-white">
               Sovereign hardware. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-300 via-amber-400 to-amber-600">
                 Built for Web3.
               </span>
             </h1>
@@ -421,13 +418,13 @@ export default function AfriTekbileLanding() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
               <a
                 href="#investment"
-                className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl shadow-xl shadow-amber-500/10 transition-all text-sm tracking-wider uppercase text-center flex items-center justify-center gap-2"
+                className="px-8 py-4 bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl shadow-xl shadow-amber-500/10 transition-all text-sm tracking-wider uppercase text-center flex items-center justify-center gap-2"
               >
                 Commit Capital <ArrowUpRight className="w-4 h-4 stroke-[3px]" />
               </a>
               <a
                 href="#showcase"
-                className="px-8 py-4 bg-zinc-900/40 hover:bg-zinc-900/80 text-white font-bold rounded-xl border border-white/[0.08] transition-all text-sm tracking-wider uppercase text-center flex items-center justify-center gap-2"
+                className="px-8 py-4 bg-zinc-900/40 hover:bg-zinc-900/80 text-white font-bold rounded-xl border border-white/8 transition-all text-sm tracking-wider uppercase text-center flex items-center justify-center gap-2"
               >
                 <Play className="w-4 h-4 fill-white text-white" /> View System
                 Hardware
@@ -436,23 +433,21 @@ export default function AfriTekbileLanding() {
           </div>
 
           <div className="lg:col-span-5 flex justify-center">
-            <div className="relative w-80 h-140 bg-linear-to-b from-zinc-900/60 to-amber-500/60 rounded-[44px] border border-white/[0.08] p-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] shadow-amber-500/[0.01] backdrop-blur-xl">
-              <img src={afritech3d} alt="" className="h-150 w-200" />
-            </div>
+            <img src={afritech3d} alt="" className="h-150 w-200" />
           </div>
         </div>
       </section>
 
       {/* --- PRESS LOGO MARQUEE --- */}
-      <section className="relative overflow-hidden bg-slate-950/40 border-y border-white/[0.06] py-10">
+      <section className="relative overflow-hidden bg-slate-950/40 border-y border-white/6 py-10">
         <div className="text-center mb-6">
           <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-zinc-500 font-display">
             Global Press Distribution Coverage
           </span>
         </div>
         <div className="w-full relative overflow-hidden flex items-center">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#030009] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#030009] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-[#030009] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-[#030009] to-transparent z-10 pointer-events-none" />
 
           <motion.div
             className="flex gap-24 whitespace-nowrap min-w-max"
@@ -487,7 +482,7 @@ export default function AfriTekbileLanding() {
         className="py-32 bg-slate-950/20 relative overflow-hidden"
       >
         {/* Ambient atmospheric backdrop specifically for Africa Map */}
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-10 h-100 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="container mx-auto px-6 lg:px-16">
           <div className="text-center max-w-3xl mx-auto mb-20">
@@ -506,8 +501,8 @@ export default function AfriTekbileLanding() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* LEFT SIDE: Animated Cybernetic Africa Node Map Logo */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center bg-zinc-900/10 border border-white/[0.04] rounded-[32px] p-8 h-[540px] relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] backdrop-blur-md">
-              <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+            <div className="lg:col-span-5 flex flex-col items-center justify-center bg-zinc-900/10 border border-white/4 rounded-4xl p-8 h-135 relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] backdrop-blur-md">
+              <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] bg-size:16px_16px pointer-events-none" />
               <AfricaNodeMap />
             </div>
 
@@ -526,15 +521,15 @@ export default function AfriTekbileLanding() {
         </div>
       </section>
       <section className=" border-t border-white/6 py-20 relative overflow-hidden">
-        <div className="container md:flex  px-6 gap-12 relative z-10">
+        <div className="container md:flex  px-6 gap-12 relative ">
           <div className="px-6 md:px-12 max-w-4xl">
             <h1 className="text-gray-400 font-semibold text-2xl md:text-3xl">
               Invest In The Future
             </h1>
-            <h1 className="max-w-3xl font-display font-black mb-10 mt-5 text-3xl md:text-5xl">
+            <h1 className="max-w-3xl font-black mb-10 mt-5 text-2xl md:text-3xl">
               AfriTekbile Equity Crowd Funding Campaign
             </h1>
-            <p className="font-display md:text-2xl text-xl text-gray-400 w-full flex">
+            <p className=" md:text-xl text-md text-gray-400 w-full flex">
               Be part of a revolution! The AfriTekbile Blockchain Smartphone is
               redefining the mobile industry with cutting-edge blockchain
               security, AI-driven features, and a vision for digital
@@ -658,7 +653,7 @@ export default function AfriTekbileLanding() {
           </div>
         </div>
 
-        <div className="container mx-auto px-6 lg:px-16 mt-20 pt-8 border-t border-white/[0.06] text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-600 font-body">
+        <div className="container mx-auto px-6 lg:px-16 mt-20 pt-8 border-t border-white/6 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-600 font-body">
           <p>
             © {new Date().getFullYear()} AfriTekbile Technologies Ltd. System
             execution confirmed.
@@ -692,7 +687,7 @@ function AfricaNodeMap() {
     <div className="w-full h-full flex flex-col items-center justify-between relative py-6">
       {/* Golden Scanning Beam */}
       <motion.div
-        className="absolute inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent pointer-events-none z-10"
+        className="absolute inset-x-0 h-[1.5px] bg-linear-to-r from-transparent via-amber-500/30 to-transparent pointer-events-none z-10"
         animate={{ top: ["0%", "100%"] }}
         transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
       />
@@ -707,7 +702,7 @@ function AfricaNodeMap() {
       </div>
 
       {/* Cybernetic Geometric Map Container */}
-      <div className="w-full max-w-[280px] aspect-[4/5] relative my-auto">
+      <div className="w-full max-w-70 aspect-4/5 relative my-auto">
         <svg
           viewBox="0 0 320 450"
           className="w-full h-full drop-shadow-[0_0_20px_rgba(245,158,11,0.15)]"
