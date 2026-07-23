@@ -34,7 +34,7 @@ import {
   X,
 } from "lucide-react";
 import afriTech from "./assets/afritek-logo.jpg";
-import afritech3d from "./assets/afritek-3d.gif";
+import afritech3d from "./assets/phone.svg";
 import afritech3d2 from "./assets/3dvideo.mp4";
 // Safe CJS/ESM interop import for react-countup in Vite
 import ReactCountUp from "react-countup";
