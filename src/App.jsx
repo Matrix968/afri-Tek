@@ -34,11 +34,12 @@ import {
   X,
 } from "lucide-react";
 import afriTech from "./assets/afritek-logo.jpg";
-import afritech3d from "./assets/phone.svg";
+import afritech3d from "./assets/phonerotate.mp4";
 import afritech3d2 from "./assets/3dvideo.mp4";
 // Safe CJS/ESM interop import for react-countup in Vite
 import ReactCountUp from "react-countup";
 import { AnimatePresence } from "framer-motion";
+import CryptoAfrica from "../src/components/Common"
 const CountUp = ReactCountUp.default || ReactCountUp;
 
 // --- DATA CONFIGURATIONS ---
@@ -433,7 +434,7 @@ export default function AfriTekbileLanding() {
           </div>
 
           <div className="lg:col-span-5 flex justify-center">
-            <img src={afritech3d} alt="" loading="lazy" className="h-150 w-200" />
+            <CryptoAfrica />
           </div>
         </div>
       </section>
