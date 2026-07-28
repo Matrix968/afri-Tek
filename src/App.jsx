@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AfriTekbileLanding from "./Pages/Home";
-import AuthScreen from "./components/auth";
-import Dashboard from "./components/dashboard";
+import AuthScreen from "./Pages/auth";
+import Dashboard from "./Client_Dashboard/dashboard";
 
 export default function App() {
   return (
