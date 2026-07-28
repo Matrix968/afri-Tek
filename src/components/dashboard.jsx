@@ -1,1727 +1,1376 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  AnimatePresence,
-} from "framer-motion";
-import bgVideo from "../assets/bg-video.mp4";
-import Lenis from "lenis";
-import { useInView } from "react-intersection-observer";
-import {
-  ArrowUpRight,
-  Play,
-  TrendingUp,
-  Gem,
-  Crown,
-  Shield,
-  Lock,
-  Zap,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Layers,
-  Brain,
-  MapPin,
-  Phone,
-  Mail,
-  CheckCircle2,
-  Calculator,
-  Cpu,
-  ChevronDown,
-  Gift,
+  LayoutDashboard,
+  Briefcase,
+  Wallet,
+  User,
+  LogOut,
   Menu,
   X,
+  Sun,
+  Moon,
+  HelpCircle,
+  Phone,
+  Mail,
+  ChevronRight,
+  Copy,
+  Check,
   Award,
+  TrendingUp,
+  DollarSign,
+  Shield,
+  Plus,
+  Filter,
+  Download,
+  Eye,
+  CheckCircle,
+  AlertCircle,
+  Calendar,
   Users,
+  Globe,
+  Crown,
   Clock,
   Percent,
-  Wallet,
-  Briefcase,
   Activity,
+  Send,
+  MessageSquare,
+  Edit,
+  Save,
+  Gift,
+  BarChart3,
+  LineChart,
+  PieChart,
+  ArrowUpRight,
+  ArrowDownRight,
+  Smartphone,
 } from "lucide-react";
-import afriTech from "../assets/afritek-logo.jpg";
-import ReactCountUp from "react-countup";
-import CryptoAfrica from "../components/Common";
+import afriTech from "../assets/afritek-logo.jpg"
+export default function Dashboard() {
+  const [currentTab, setCurrentTab] = useState("overview");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [profileSubTab, setProfileSubTab] = useState("overview");
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [supportSubject, setSupportSubject] = useState("");
+  const [supportMessage, setSupportMessage] = useState("");
+  const [supportCategory, setSupportCategory] = useState("general");
+  const [isEditing, setIsEditing] = useState(false);
 
-const CountUp = ReactCountUp.default || ReactCountUp;
+  // Profile form state
+  const [profileData, setProfileData] = useState({
+    name: "John AfriTek",
+    email: "john@afritek.com",
+    phone: "+1 (555) 123-4567",
+    address: "123 Tech Street, Lagos, Nigeria",
+    bio: "Passionate investor in African tech innovation. Believer in the future of blockchain and AI.",
+  });
 
-// --- DATA CONFIGURATIONS ---
-const corePillars = [
-  {
-    id: "growth",
-    label: "Growth Strategy",
-    icon: TrendingUp,
-    desc: "Exponential expansion into high-yield emerging digital markets across the African continent.",
-  },
-  {
-    id: "wealth",
-    label: "Wealth Generation",
-    icon: Gem,
-    desc: "Secure early-stage private equity and capture direct yields from global decentralized technology demand.",
-  },
-  {
-    id: "prestige",
-    label: "Tech Prestige",
-    icon: Crown,
-    desc: "Command authority with a physical device that serves as a status symbol and nodes key.",
-  },
-  {
-    id: "safety",
-    label: "Hardware Safety",
-    icon: Shield,
-    desc: "Enterprise-grade encryption protocols running natively on an insulated, custom-built Secure OS.",
-  },
-  {
-    id: "security",
-    label: "Self-Sovereign Security",
-    icon: Lock,
-    desc: "Decentralized cryptographic storage keeping your digital identity entirely under your own keys.",
-  },
-];
-
-const features = [
-  {
-    title: "Layer-1 Blockchain Core",
-    desc: "Secures and manages your private keys natively, completely isolated from standard application memory.",
-    icon: Layers,
-  },
-  {
-    title: "Sleek Native Gateway",
-    desc: "Access the decentralized ecosystem fluidly via custom-engineered iOS and Android sandboxed apps.",
-    icon: Smartphone,
-  },
-  {
-    title: "Web3 Protocol Stack",
-    desc: "A custom-built hardware environment tailored for multi-chain asset management and lightning-fast dApps.",
-    icon: Zap,
-  },
-  {
-    title: "Neural AI Assistant",
-    desc: "Locally-run machine learning models that personalize your digital workflow without uploading data to the cloud.",
-    icon: Brain,
-  },
-];
-
-const devices = {
-  Phones: {
-    name: "AfriTek Phone Prime",
-    specs: [
-      "108MP Cinematic Triple Lens",
-      '6.8" AMOLED 120Hz Infinite Screen',
-      "Hardware Cryptographic Key Vault",
-      "Double-Enclave Secure OS Core",
-    ],
-    imageText: "SECURE NODE 01",
-    icon: Smartphone,
-  },
-  Tablets: {
-    name: "AfriTek Tab Horizon",
-    specs: [
-      '11" Liquid Retina TrueTone Display',
-      "Quad-Array Spatial Audio Chamber",
-      "Isolated Offline Sandbox Mode",
-      "Machined Aerospace Aluminum Body",
-    ],
-    imageText: "HORIZON PRO",
-    icon: Tablet,
-  },
-  Laptop: {
-    name: "AfriTek Book Titanium",
-    specs: [
-      "Ultralight Titanium Shell",
-      "Next-Gen Computational Engine",
-      "Dedicated Web3 Physical Keypad",
-      "Biometric Touch ID Encryption Lock",
-    ],
-    imageText: "TITAN BOOK",
-    icon: Laptop,
-  },
-  IPad: {
-    name: "AfriTek Slate Pro",
-    specs: [
-      "Precision Multi-Touch Surface",
-      "Dual Boot Architecture (OS/SecureOS)",
-      "Seamless Hot-Wallet Syncing",
-      "Multi-Day High-Density Power Cell",
-    ],
-    imageText: "SLATE CORE",
-    icon: Tablet,
-  },
-};
-
-const faqs = [
-  {
-    question: "How does the custom hardware block security breaches?",
-    answer:
-      "AfriTek devices contain an isolated physical chip known as the Secure Enclave. This chip runs completely parallel to the main operating system, processing biometric validation, private keys, and encrypted conversations entirely locally.",
-  },
-  {
-    question: "What legal rights do I receive as an equity shareholder?",
-    answer:
-      "When you participate in our fractional seed rounds, you receive officially registered, tokenized corporate equity shares. This entitles you to dividend distributions, voting rights on critical ecosystem updates, and capital appreciation.",
-  },
-  {
-    question: "What is the capital requirement to start investing?",
-    answer:
-      "To ensure absolute accessibility, our seed round starts at just $100 (approximately ₦100,000). Your allocation is immediately locked and verified via certified financial custodians.",
-  },
-];
-
-const partners = [
-  "TechCabal",
-  "Disrupt Africa",
-  "Techpoint",
-  "Ventures Africa",
-  "Nairametrics",
-  "Stears Business",
-];
-const doublePartners = [...partners, ...partners];
-
-// Animated Counter Component
-const AnimatedCounter = ({ value, suffix = "", prefix = "", duration = 2 }) => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
-
-  return (
-    <span ref={ref}>
-      {inView && (
-        <CountUp
-          start={0}
-          end={value}
-          duration={duration}
-          suffix={suffix}
-          prefix={prefix}
-          separator=","
-        />
-      )}
-    </span>
-  );
-};
-
-export default function AfriTekbileLanding() {
-  // Initialize Lenis Smooth Scroll
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
-  const [isActive, setIsActive] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const navLinks = [
-    {
-      name: "Vision",
-      href: "#about",
-    },
-    {
-      name: "Devices",
-      href: "#showcase",
-    },
-    {
-      name: "Ecosystem",
-      href: "#technology",
-    },
-    {
-      name: "Equity",
-      href: "#investment",
-    },
-    {
-      name: "Login",
-      href: "/login",
-    },
+  const tabs = [
+    { id: "overview", label: "Overview", icon: LayoutDashboard },
+    { id: "portfolio", label: "Portfolio", icon: Briefcase },
+    { id: "dividends", label: "Dividends", icon: Wallet },
+    { id: "support", label: "Support", icon: HelpCircle },
+    { id: "profile", label: "Profile", icon: User },
   ];
 
-  const handleNavClick = (href) => {
-    if (href.startsWith("#")) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-    setIsActive(false);
+  // Mock Data
+  const userData = {
+    name: "John AfriTek",
+    email: "john@afritek.com",
+    tier: "Gold Investor",
+    tierLevel: 3,
+    joinedDate: "January 2025",
+    referralCode: "AFRITEK-2025",
+    avatar: "JA",
   };
 
-  return (
-    <div className="relative min-h-screen bg-[#030009] text-zinc-100 font-sans antialiased overflow-x-hidden selection:bg-amber-400 selection:text-black">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&family=Space+Grotesk:wght=400;500;600;700&display=swap');
-        
-        .font-display {
-          font-family: 'Space Grotesk', sans-serif;
-          letter-spacing: -0.03em;
-        }
-        .font-body {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        
-        .perspective-container {
-          perspective: 1500px;
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
-          will-change: transform;
-        }
-        .preserve-3d {
-          transform-style: preserve-3d;
-        }
-        .backface-hidden {
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-        }
-        .bg-size-200 {
-          background-size: 200% 200%;
-        }
-        @keyframes shimmer {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes pulse-ring {
-          0% { transform: scale(0.8); opacity: 0.6; }
-          100% { transform: scale(2); opacity: 0; }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-shimmer {
-          animation: shimmer 3s ease-in-out infinite;
-        }
-        .floating-particle {
-          position: absolute;
-          border-radius: 50%;
-          pointer-events: none;
-          background: radial-gradient(circle, rgba(245,158,11,0.3), transparent 70%);
-        }
-      `}</style>
-
-      {/* Ambient backgrounds with parallax */}
-      <motion.div
-        className="absolute top-0 left-1/4 w-150 h-150 bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full blur-[160px] pointer-events-none"
-        animate={{
-          x: [0, 30, -20, 0],
-          y: [0, -20, 30, 0],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-[25%] right-1/4 w-175 h-175 bg-gradient-to-bl from-purple-500/5 to-transparent rounded-full blur-[200px] pointer-events-none"
-        animate={{
-          x: [0, -30, 20, 0],
-          y: [0, 20, -30, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-      />
-      <motion.div
-        className="absolute bottom-[15%] left-1/3 w-125 h-125 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none"
-        animate={{
-          x: [0, 20, -10, 0],
-          y: [0, -10, 20, 0],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 4,
-        }}
-      />
-
-      {/* Floating Particles */}
-      {[...Array(12)].map((_, i) => (
-        <motion.div
-          key={`particle-${i}`}
-          className="floating-particle"
-          style={{
-            width: Math.random() * 4 + 2 + "px",
-            height: Math.random() * 4 + 2 + "px",
-            left: Math.random() * 100 + "%",
-            top: Math.random() * 100 + "%",
-          }}
-          animate={{
-            y: [0, -30 - Math.random() * 40, 0],
-            x: [0, (Math.random() - 0.5) * 30, 0],
-            opacity: [0, 0.5, 0],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 6,
-            repeat: Infinity,
-            delay: Math.random() * 5,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* --- HEADER --- */}
-      <motion.header
-        className={`fixed w-full top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-white/6 transition-all duration-500 ${
-          scrolled ? "shadow-2xl shadow-black/50" : ""
-        }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <div className="container mx-auto px-6 lg:px-16 py-5 flex items-center justify-between">
-          <motion.div
-            className="flex items-center gap-3"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            <div className="bg-gradient-to-br from-amber-400 to-amber-600 text-black p-2.5 rounded-xl shadow-lg shadow-amber-500/10">
-              <img src={afriTech} alt="" className="w-10 h-8 rounded-md" />
-            </div>
-            <div>
-              <span className="font-display font-bold text-lg tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
-                AfriTek
-              </span>
-            </div>
-          </motion.div>
-          <>
-            {/* Hamburger Button */}
-            <motion.button
-              onClick={() => setIsActive(!isActive)}
-              className="md:hidden fixed top-5 right-5 z-100 flex items-center justify-center w-11 h-11 rounded-full bg-zinc-900 hover:bg-amber-400 transition-all duration-300"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <AnimatePresence mode="wait">
-                {isActive ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -180, scale: 0 }}
-                    animate={{ rotate: 0, scale: 1 }}
-                    exit={{ rotate: 180, scale: 0 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <X className="text-white" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 180, scale: 0 }}
-                    animate={{ rotate: 0, scale: 1 }}
-                    exit={{ rotate: -180, scale: 0 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <Menu className="text-white" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
-
-            {/* Mobile Menu */}
-            <AnimatePresence>
-              {isActive && (
-                <>
-                  {/* Backdrop */}
-                  <motion.div
-                    onClick={() => setIsActive(false)}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-80"
-                  />
-
-                  {/* Menu */}
-                  <motion.div
-                    initial={{ x: "100%" }}
-                    animate={{ x: 0 }}
-                    exit={{ x: "100%" }}
-                    transition={{
-                      duration: 0.45,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="fixed top-0 right-0 w-72 h-screen bg-zinc-950 border-l border-zinc-800 z-90 flex flex-col pt-28 px-8 gap-4"
-                  >
-                    {navLinks.map((link, index) => {
-                      if (link.href.startsWith("/")) {
-                        return (
-                          <motion.div
-                            key={link.name}
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{
-                              delay: index * 0.08,
-                            }}
-                          >
-                            <Link
-                              to={link.href}
-                              onClick={() => setIsActive(false)}
-                              className={`group flex items-center justify-between rounded-xl border px-5 py-4 text-lg font-medium transition-all duration-300 ${
-                                link.isDashboard
-                                  ? "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-400 hover:text-black"
-                                  : "border-zinc-800 bg-zinc-900/50 text-white hover:bg-amber-400 hover:text-black"
-                              }`}
-                            >
-                              {link.name}
-                              {link.isDashboard && (
-                                <motion.span
-                                  className="text-xs px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-400"
-                                  whileHover={{ scale: 1.1 }}
-                                >
-                                  NEW
-                                </motion.span>
-                              )}
-                              <motion.span
-                                whileHover={{ x: 5 }}
-                                className="text-xl"
-                              >
-                                →
-                              </motion.span>
-                            </Link>
-                          </motion.div>
-                        );
-                      }
-                      return (
-                        <motion.a
-                          key={link.name}
-                          href={link.href}
-                          onClick={() => handleNavClick(link.href)}
-                          initial={{ opacity: 0, x: 40 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{
-                            delay: index * 0.08,
-                          }}
-                          className={`group flex items-center justify-between rounded-xl border px-5 py-4 text-lg font-medium transition-all duration-300 ${
-                            link.isDashboard
-                              ? "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-400 hover:text-black"
-                              : "border-zinc-800 bg-zinc-900/50 text-white hover:bg-amber-400 hover:text-black"
-                          }`}
-                        >
-                          {link.name}
-                          {link.isDashboard && (
-                            <motion.span
-                              className="text-xs px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-400"
-                              whileHover={{ scale: 1.1 }}
-                            >
-                              NEW
-                            </motion.span>
-                          )}
-                          <motion.span
-                            whileHover={{ x: 5 }}
-                            className="text-xl"
-                          >
-                            →
-                          </motion.span>
-                        </motion.a>
-                      );
-                    })}
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
-          </>
-          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-zinc-400">
-            {navLinks.map((link) => {
-              if (link.href.startsWith("/")) {
-                return (
-                  <Link
-                    key={link.name}
-                    to={link.href}
-                    className={`transition-colors flex items-center gap-1.5 ${
-                      link.isDashboard
-                        ? "text-amber-400 hover:text-amber-300 font-bold"
-                        : "hover:text-amber-400"
-                    }`}
-                  >
-                    {link.name}
-                    {link.isDashboard && (
-                      <motion.span
-                        className="text-[8px] px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-400"
-                        animate={{
-                          opacity: [0.5, 1, 0.5],
-                          scale: [1, 1.1, 1],
-                        }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        LIVE
-                      </motion.span>
-                    )}
-                  </Link>
-                );
-              }
-              return (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  className={`transition-colors flex items-center gap-1.5 ${
-                    link.isDashboard
-                      ? "text-amber-400 hover:text-amber-300 font-bold"
-                      : "hover:text-amber-400"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {link.name}
-                  {link.isDashboard && (
-                    <motion.span
-                      className="text-[8px] px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-400"
-                      animate={{
-                        opacity: [0.5, 1, 0.5],
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      LIVE
-                    </motion.span>
-                  )}
-                </motion.a>
-              );
-            })}
-          </nav>
-          <motion.a
-            href="#investment"
-            className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 text-white font-bold px-6 py-3 rounded-xl border border-amber-500/20 shadow-lg shadow-amber-500/5 transition-all text-xs tracking-wider uppercase"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Acquire Shares <ArrowUpRight className="w-4 h-4" />
-          </motion.a>
-        </div>
-      </motion.header>
-
-      {/* --- HERO WITH NEON BLOCKCHAIN BACKGROUND VIDEO --- */}
-      <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24">
-        <div className="absolute inset-0 z-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          >
-            <source src={bgVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#030009]/30 via-[#030009]/80 to-[#030009]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#030009_95%)]" />
-        </div>
-
-        <div className="container mx-auto px-6 lg:px-16 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <motion.div
-            className="lg:col-span-7 space-y-8 text-center lg:text-left"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <motion.div
-              className="inline-flex items-center gap-2.5 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-full backdrop-blur-md"
-              animate={{
-                boxShadow: [
-                  "0 0 0px rgba(245,158,11,0)",
-                  "0 0 20px rgba(245,158,11,0.1)",
-                  "0 0 0px rgba(245,158,11,0)",
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <motion.span
-                className="w-2 h-2 rounded-full bg-amber-400"
-                animate={{ scale: [1, 1.5, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              />
-              <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-amber-300 font-display">
-                Seed Stage Allocation Active
-              </span>
-            </motion.div>
-            <motion.h1
-              className="font-display text-4xl sm:text-6xl lg:text-[76px] font-bold leading-[1.05] tracking-tight text-white"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              Sovereign hardware. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600">
-                Built for Web3.
-              </span>
-            </motion.h1>
-            <motion.p
-              className="font-body text-base sm:text-lg text-zinc-400 max-w-xl leading-relaxed font-light"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              We are engineering Africa's premier blockchain-native physical
-              ecosystem. Build capital, preserve decentralized keys, and claim
-              global corporate shares from our early seed round.
-            </motion.p>
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
-              <motion.a
-                href="#investment"
-                className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl shadow-xl shadow-amber-500/10 transition-all text-sm tracking-wider uppercase text-center flex items-center justify-center gap-2"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Commit Capital <ArrowUpRight className="w-4 h-4 stroke-[3px]" />
-              </motion.a>
-              <motion.a
-                href="#showcase"
-                className="px-8 py-4 bg-zinc-900/40 hover:bg-zinc-900/80 text-white font-bold rounded-xl border border-white/8 transition-all text-sm tracking-wider uppercase text-center flex items-center justify-center gap-2"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Play className="w-4 h-4 fill-white text-white" /> View System
-                Hardware
-              </motion.a>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="lg:col-span-5 flex justify-center"
-            initial={{ opacity: 0, scale: 0.8, rotateY: 20 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 1, delay: 0.6, type: "spring" }}
-          >
-            <CryptoAfrica />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* --- STATS COUNTER SECTION --- */}
-      <section className="relative overflow-hidden py-16 border-y border-white/6 bg-slate-950/30">
-        <div className="container mx-auto px-6 lg:px-16">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="text-3xl sm:text-4xl font-display font-bold text-amber-400">
-                <AnimatedCounter value={5000} suffix="+" duration={2.5} />
-              </div>
-              <p className="text-xs uppercase tracking-widest text-zinc-400 font-body mt-1">
-                Active Nodes
-              </p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-            >
-              <div className="text-3xl sm:text-4xl font-display font-bold text-amber-400">
-                <AnimatedCounter value={124} suffix="+" duration={2.5} />
-              </div>
-              <p className="text-xs uppercase tracking-widest text-zinc-400 font-body mt-1">
-                Countries
-              </p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <div className="text-3xl sm:text-4xl font-display font-bold text-amber-400">
-                <AnimatedCounter value={250} suffix="M+" duration={2.5} />
-              </div>
-              <p className="text-xs uppercase tracking-widest text-zinc-400 font-body mt-1">
-                Network Value
-              </p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.45 }}
-            >
-              <div className="text-3xl sm:text-4xl font-display font-bold text-amber-400">
-                <AnimatedCounter value={99.9} suffix="%" duration={2.5} />
-              </div>
-              <p className="text-xs uppercase tracking-widest text-zinc-400 font-body mt-1">
-                Uptime
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- PRESS LOGO MARQUEE --- */}
-      <section className="relative overflow-hidden bg-slate-950/40 border-y border-white/6 py-10">
-        <div className="text-center mb-6">
-          <motion.span
-            className="text-[10px] uppercase font-bold tracking-[0.3em] text-zinc-500 font-display inline-block"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Global Press Distribution Coverage
-          </motion.span>
-        </div>
-
-        <div className="w-full relative overflow-hidden flex items-center">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#030009] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#030009] to-transparent z-10 pointer-events-none" />
-
-          <motion.div
-            className="flex gap-24 whitespace-nowrap w-max"
-            animate={{
-              x: [0, -1000],
-            }}
-            transition={{
-              duration: 25,
-              ease: "linear",
-              repeat: Infinity,
-              repeatType: "loop",
-            }}
-          >
-            {doublePartners.map((partner, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-4 text-zinc-400 font-display font-semibold tracking-[0.15em] text-sm uppercase"
-              >
-                <div className="w-2 h-2 rounded-full bg-amber-500/40" />
-                <span>{partner}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* --- VALUE PROPOSITION / PILLARS --- */}
-      <PillarsSection />
-
-      {/* --- PHONE SPINNING SHOWCASE SECTION --- */}
-      <DeviceShowcase />
-
-      {/* --- INVESTMENT / CALCULATOR / SHARES PROGRESS --- */}
-      <InvestmentCalculator />
-
-      {/* --- FEATURES GRID & INTERACTIVE AFRICA NODE MAP --- */}
-      <section
-        id="technology"
-        className="py-32 bg-slate-950/20 relative overflow-hidden"
-      >
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-10 h-100 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
-
-        <div className="container mx-auto px-6 lg:px-16">
-          <motion.div
-            className="text-center max-w-3xl mx-auto mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="text-xs uppercase font-bold text-amber-500 tracking-[0.3em] font-display">
-              ECOSYSTEM MECHANICS
-            </span>
-            <h2 className="font-display text-3xl sm:text-5xl font-bold text-white mt-3">
-              Uncompromising Integration
-            </h2>
-            <p className="font-body text-zinc-400 text-base sm:text-lg mt-4 font-light leading-relaxed">
-              Every physical engineering layout works dynamically across nodes.
-              Hover over any system block below to unveil its operational
-              mechanics.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 flex flex-col items-center justify-center bg-zinc-900/10 border border-white/4 rounded-4xl p-8 h-135 relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] backdrop-blur-md">
-              <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] bg-size:16px_16px pointer-events-none" />
-              <AfricaNodeMap />
-            </div>
-
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {features.map((feat, i) => (
-                <FeatureCard
-                  key={i}
-                  title={feat.title}
-                  desc={feat.desc}
-                  icon={feat.icon}
-                  index={i}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- INVESTMENT CTA SECTION --- */}
-      <motion.section
-        className="border-t border-white/6 py-20 relative overflow-hidden"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent" />
-        <div className="container mx-auto px-6 lg:px-16 relative">
-          <div className="max-w-4xl">
-            <motion.h1
-              className="text-gray-400 font-semibold text-2xl md:text-3xl"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              Invest In The Future
-            </motion.h1>
-            <motion.h1
-              className="max-w-3xl font-black mb-10 mt-5 text-2xl md:text-3xl text-white"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              AfriTekbile Equity Crowd Funding Campaign
-            </motion.h1>
-            <motion.p
-              className="md:text-xl text-md text-gray-400 w-full flex"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              Be part of a revolution! The AfriTekbile Blockchain Smartphone is
-              redefining the mobile industry with cutting-edge blockchain
-              security, AI-driven features, and a vision for digital
-              transformation across Africa. Our crowdfunding model allows anyone
-              to invest with a small amount and gain a stake in Africa's leading
-              smartphone innovation.
-            </motion.p>
-            <motion.button
-              className="hover:shadow-lg inset-0 cursor-pointer shadow-orange-600 active:scale-[0.9] bg-gradient-to-br from-amber-300 px-5 rounded-md text-black font-display text-xl font-medium py-3 mt-5 to-amber-500"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 10px 40px rgba(245,158,11,0.3)",
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Invest Now
-            </motion.button>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* --- FAQ SECTION --- */}
-      <FAQSection />
-
-      {/* --- FOOTER --- */}
-      <footer className="bg-slate-950 border-t border-white/6 py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-30" />
-        <div className="container mx-auto px-6 lg:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative z-10">
-          <motion.div
-            className="space-y-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center gap-3">
-              <div className="bg-amber-500 text-black p-2.5 rounded-xl">
-                <Cpu className="w-5 h-5" />
-              </div>
-              <span className="font-display font-bold text-xl tracking-wider text-white">
-                AfriTek
-              </span>
-            </div>
-            <p className="font-body text-xs text-zinc-500 leading-relaxed font-light">
-              Engineering structural digital sovereignty across key ecosystems.
-              Designing secure hardware architecture natively for Africa.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <h4 className="font-display font-bold text-xs text-zinc-300 uppercase tracking-[0.2em] mb-5">
-              Ecosystem Node
-            </h4>
-            <ul className="space-y-3 font-body text-xs text-zinc-500">
-              <li>
-                <a
-                  href="#showcase"
-                  className="hover:text-white transition-colors"
-                >
-                  AfriTek Phone Prime
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#showcase"
-                  className="hover:text-white transition-colors"
-                >
-                  AfriTek Titanium Laptop
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#showcase"
-                  className="hover:text-white transition-colors"
-                >
-                  AfriTek Tab Horizon
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#technology"
-                  className="hover:text-white transition-colors"
-                >
-                  Blockchain Native Storage
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h4 className="font-display font-bold text-xs text-zinc-300 uppercase tracking-[0.2em] mb-5">
-              Support Portal
-            </h4>
-            <ul className="space-y-3 font-body text-xs text-zinc-500">
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Engineering Documentation
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Corporate Escrow Terms
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  FAQ Registry
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Privacy Principles
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <h4 className="font-display font-bold text-xs text-zinc-300 uppercase tracking-[0.2em] mb-5">
-              Gateway Contact
-            </h4>
-            <ul className="space-y-3.5 font-body text-xs text-zinc-500">
-              <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-amber-500" /> core@AfriTektech.com
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-amber-500" /> +234 (0)
-                800-AfriTek
-              </li>
-              <li className="flex items-center gap-2.5">
-                <MapPin className="w-4 h-4 text-amber-500" /> Tech Enclave,
-                Lagos, Nigeria
-              </li>
-            </ul>
-          </motion.div>
-        </div>
-
-        <div className="container mx-auto px-6 lg:px-16 mt-20 pt-8 border-t border-white/6 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-600 font-body">
-          <p>
-            © {new Date().getFullYear()} AfriTekbile Technologies Ltd. System
-            execution confirmed.
-          </p>
-          <div className="flex gap-6 font-semibold uppercase tracking-wider text-[10px] font-display">
-            <a href="#" className="hover:text-white transition-colors">
-              Third-Party Audit Protocol
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Escrow Guarantee
-            </a>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// --- SUB-COMPONENTS ---
-
-function AfricaNodeMap() {
-  const nodes = [
-    { id: "lagos", x: 120, y: 240, label: "Lagos Hub" },
-    { id: "cairo", x: 230, y: 80, label: "Cairo Node" },
-    { id: "casablanca", x: 100, y: 80, label: "Casablanca" },
-    { id: "nairobi", x: 250, y: 260, label: "Nairobi Hub" },
-    { id: "joburg", x: 185, y: 410, label: "Joburg Node" },
-    { id: "dakar", x: 40, y: 180, label: "Dakar Node" },
+  const stats = [
+    {
+      label: "Total Invested",
+      value: "$245,000",
+      change: "+12.5%",
+      icon: TrendingUp,
+      color: "amber",
+    },
+    {
+      label: "Total Returns",
+      value: "$68,400",
+      change: "+8.2%",
+      icon: DollarSign,
+      color: "green",
+    },
+    {
+      label: "ROI",
+      value: "27.9%",
+      change: "+3.1%",
+      icon: Percent,
+      color: "blue",
+    },
+    {
+      label: "Active Investments",
+      value: "8",
+      change: "+2",
+      icon: Briefcase,
+      color: "purple",
+    },
+    {
+      label: "Pending Returns",
+      value: "$12,800",
+      change: "-$2,400",
+      icon: Clock,
+      color: "orange",
+    },
+    {
+      label: "Account Balance",
+      value: "$23,450",
+      change: "+$5,200",
+      icon: Wallet,
+      color: "emerald",
+    },
   ];
 
-  return (
-    <div className="w-full h-full flex flex-col items-center justify-between relative py-6">
-      <motion.div
-        className="absolute inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent pointer-events-none z-10"
-        animate={{ top: ["0%", "100%"] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-      />
+  const investments = [
+    {
+      id: 1,
+      name: "AfriTek Seed Fund",
+      amount: 50000,
+      returns: 12400,
+      status: "active",
+      date: "Jan 15, 2025",
+      yield: 24.8,
+      icon: TrendingUp,
+    },
+    {
+      id: 2,
+      name: "Tech Infrastructure",
+      amount: 35000,
+      returns: 8200,
+      status: "active",
+      date: "Feb 1, 2025",
+      yield: 23.4,
+      icon: Shield,
+    },
+    {
+      id: 3,
+      name: "DeFi Protocol",
+      amount: 25000,
+      returns: 4200,
+      status: "pending",
+      date: "Mar 10, 2025",
+      yield: 16.8,
+      icon: Activity,
+    },
+    {
+      id: 4,
+      name: "AI Research Lab",
+      amount: 15000,
+      returns: 1800,
+      status: "completed",
+      date: "Dec 5, 2024",
+      yield: 12.0,
+      icon: Activity,
+    },
+  ];
 
-      <div className="text-center z-10 space-y-1">
-        <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-amber-500/80 font-display">
-          Sovereign Ledger
-        </span>
-        <h3 className="font-display font-bold text-lg text-white">
-          Consolidated Africa Node
-        </h3>
-      </div>
+  const dividendTransactions = [
+    {
+      id: 1,
+      amount: 2400,
+      type: "dividend",
+      status: "completed",
+      date: "Mar 15, 2025",
+      description: "Q1 2025 Dividend Distribution",
+    },
+    {
+      id: 2,
+      amount: 5000,
+      type: "withdrawal",
+      status: "pending",
+      date: "Mar 12, 2025",
+      description: "Withdrawal to USDC Wallet",
+    },
+    {
+      id: 3,
+      amount: 1200,
+      type: "dividend",
+      status: "completed",
+      date: "Feb 15, 2025",
+      description: "February Dividend Distribution",
+    },
+    {
+      id: 4,
+      amount: 3800,
+      type: "dividend",
+      status: "completed",
+      date: "Jan 15, 2025",
+      description: "January Dividend Distribution",
+    },
+    {
+      id: 5,
+      amount: 2000,
+      type: "withdrawal",
+      status: "failed",
+      date: "Jan 10, 2025",
+      description: "Withdrawal - Insufficient Balance",
+    },
+  ];
 
-      <div className="w-full max-w-70 aspect-4/5 relative my-auto">
-        <svg
-          viewBox="0 0 320 450"
-          className="w-full h-full drop-shadow-[0_0_20px_rgba(245,158,11,0.15)]"
-        >
-          <defs>
-            <linearGradient id="africaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#d97706" stopOpacity="0.05" />
-            </linearGradient>
-          </defs>
+  const commissions = [
+    {
+      id: 1,
+      amount: 1500,
+      source: "Referral - John Doe",
+      date: "Mar 14, 2025",
+      status: "pending",
+    },
+    {
+      id: 2,
+      amount: 2300,
+      source: "Referral - Jane Smith",
+      date: "Mar 10, 2025",
+      status: "paid",
+    },
+    {
+      id: 3,
+      amount: 800,
+      source: "Referral - Mike Johnson",
+      date: "Mar 5, 2025",
+      status: "paid",
+    },
+  ];
 
-          <motion.polygon
-            points="100,80 230,80 240,100 285,210 250,290 185,410 145,330 120,240 40,180 80,100"
-            className="stroke-amber-500/30 stroke-2 fill-url(#africaGrad)"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 2.5, ease: "easeInOut" }}
-          />
+  const supportTickets = [
+    {
+      id: 1,
+      subject: "Withdrawal Issue",
+      status: "open",
+      date: "Mar 14, 2025",
+      category: "Finance",
+    },
+    {
+      id: 2,
+      subject: "Account Verification",
+      status: "in-progress",
+      date: "Mar 12, 2025",
+      category: "Account",
+    },
+    {
+      id: 3,
+      subject: "Investment Inquiry",
+      status: "resolved",
+      date: "Mar 10, 2025",
+      category: "Investment",
+    },
+  ];
 
-          <g>
-            {[
-              { x1: 100, y1: 80, x2: 120, y2: 240 },
-              { x1: 230, y1: 80, x2: 120, y2: 240 },
-              { x1: 250, y1: 260, x2: 120, y2: 240 },
-              { x1: 185, y1: 410, x2: 120, y2: 240 },
-              { x1: 40, y1: 180, x2: 120, y2: 240 },
-              { x1: 285, y1: 210, x2: 250, y2: 260 },
-              { x1: 250, y1: 260, x2: 185, y2: 410 },
-            ].map((line, i) => (
-              <motion.line
-                key={i}
-                x1={line.x1}
-                y1={line.y1}
-                x2={line.x2}
-                y2={line.y2}
-                className="stroke-amber-500/10 stroke-[1px]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-              />
-            ))}
-          </g>
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
 
-          {nodes.map((node) => (
-            <g key={node.id}>
-              <motion.circle
-                cx={node.x}
-                cy={node.y}
-                r={12}
-                className="fill-transparent stroke-amber-500/30"
-                animate={{ scale: [1, 2.2, 1], opacity: [0.6, 0, 0.6] }}
-                transition={{
-                  duration: 2.5 + Math.random() * 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              <motion.circle
-                cx={node.x}
-                cy={node.y}
-                r={4.5}
-                className="fill-amber-400 stroke-black stroke-[1.5px]"
-                animate={{ scale: [1, 1.3, 1] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-            </g>
-          ))}
-        </svg>
-      </div>
+  const handleSaveProfile = () => {
+    setIsEditing(false);
+  };
 
-      <div className="w-full flex justify-between items-center px-4 border-t border-white/[0.04] pt-4 text-[10px] text-zinc-500 font-display uppercase tracking-widest z-10">
-        <span>Nodes online: 4,090</span>
-        <motion.span
-          className="text-amber-500 font-bold flex items-center gap-1"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" />
-          Network Synced
-        </motion.span>
-      </div>
-    </div>
-  );
-}
-
-function FeatureCard({ title, desc, icon: Icon, index }) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className="w-full h-[260px] perspective-container cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-    >
-      <motion.div
-        className="relative w-full h-full preserve-3d"
-        animate={{ rotateY: isHovered ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+  const renderOverview = () => (
+    <div className="space-y-6">
+      {/* Welcome Section */}
+      <div
+        className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? "" : ""}`}
       >
-        <div className="absolute inset-0 bg-zinc-900/10 border border-white/[0.04] p-8 rounded-[24px] flex flex-col justify-between backface-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] backdrop-blur-md">
-          <div className="w-12 h-12 rounded-2xl bg-black border border-white/[0.05] flex items-center justify-center text-amber-500">
-            <Icon className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[10px] text-amber-500/60 uppercase tracking-widest font-display font-semibold block mb-2">
-              MODULE ID_{String(index + 1).padStart(2, "0")}
-            </span>
-            <h3 className="font-display font-bold text-xl text-white leading-snug">
-              {title}
-            </h3>
-          </div>
+        <div>
+          <h1
+            className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Good morning, {userData.name}
+          </h1>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Here's your investment overview
+          </p>
         </div>
+        <div className="flex items-center gap-3">
+          <div
+            className={`flex items-center gap-2 px-4 py-2 border rounded-xl ${darkMode ? "bg-amber-500/10 border-amber-500/20" : "bg-amber-50 border-amber-200"}`}
+          >
+            <Award className={darkMode ? "text-amber-400" : "text-amber-600"} />
+            <span
+              className={`text-sm font-semibold ${darkMode ? "text-amber-400" : "text-amber-600"}`}
+            >
+              {userData.tier}
+            </span>
+          </div>
+          <button className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-xl text-sm hover:bg-amber-600 transition-colors flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Invest Now
+          </button>
+        </div>
+      </div>
 
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-zinc-950 to-black border border-amber-500/30 p-8 rounded-[24px] flex flex-col justify-center backface-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-          style={{ transform: "rotateY(180deg)" }}
-        >
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 border-b border-white/[0.05] pb-3">
-              <Icon className="w-4 h-4 text-amber-500" />
-              <span className="text-[10px] uppercase tracking-widest font-display font-bold text-zinc-400">
-                Specs Registry
-              </span>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
+          const isPositive = stat.change.startsWith("+");
+          const colorMap = {
+            amber: darkMode
+              ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+              : "bg-amber-50 text-amber-600 border-amber-200",
+            green: darkMode
+              ? "bg-green-500/10 text-green-400 border-green-500/20"
+              : "bg-green-50 text-green-600 border-green-200",
+            blue: darkMode
+              ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+              : "bg-blue-50 text-blue-600 border-blue-200",
+            purple: darkMode
+              ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+              : "bg-purple-50 text-purple-600 border-purple-200",
+            orange: darkMode
+              ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+              : "bg-orange-50 text-orange-600 border-orange-200",
+            emerald: darkMode
+              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+              : "bg-emerald-50 text-emerald-600 border-emerald-200",
+          };
+          const bgMap = darkMode
+            ? "bg-zinc-900/50 border-zinc-800"
+            : "bg-white border-gray-200";
+          return (
+            <div
+              key={index}
+              className={`${bgMap} border rounded-2xl p-6 hover:${darkMode ? "border-zinc-700" : "shadow-lg"} transition-all`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    {stat.label}
+                  </p>
+                  <p
+                    className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mt-1`}
+                  >
+                    {stat.value}
+                  </p>
+                  <p
+                    className={`text-xs font-medium mt-1 ${isPositive ? "text-green-500" : "text-red-500"}`}
+                  >
+                    {stat.change}
+                  </p>
+                </div>
+                <div
+                  className={`p-3 rounded-xl border ${colorMap[stat.color]}`}
+                >
+                  <Icon className="w-5 h-5" />
+                </div>
+              </div>
             </div>
-            <p className="font-body text-xs sm:text-sm text-zinc-300 leading-relaxed font-light">
-              {desc}
+          );
+        })}
+      </div>
+
+      {/* Investor Tier Progress */}
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+              Investor Tier Progress
+            </h3>
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              You're at {userData.tier} level
             </p>
           </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Crown className="w-4 h-4 text-amber-500" />
+            <span className={darkMode ? "text-zinc-300" : "text-gray-700"}>
+              Next: Platinum Investor
+            </span>
+            <span className="text-amber-500 font-bold">$500,000</span>
+          </div>
         </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function PillarsSection() {
-  const [activePillar, setActivePillar] = useState("growth");
-
-  return (
-    <section id="about" className="py-32 container mx-auto px-6 lg:px-16">
-      <motion.div
-        className="text-center max-w-3xl mx-auto mb-24"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <span className="text-xs uppercase font-bold text-amber-500 tracking-[0.3em] font-display">
-          ARCHITECTURAL BACKBONE
-        </span>
-        <h2 className="font-display text-3xl sm:text-5xl font-bold text-white mt-3">
-          Sovereignty Built on Steel & Silicon
-        </h2>
-        <p className="font-body text-zinc-400 text-base sm:text-lg mt-4 font-light leading-relaxed">
-          We assemble concrete digital defenses and hardware modules ensuring
-          absolute liquidity alignment and institutional capital growth.
-        </p>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-        <div className="lg:col-span-5 flex flex-col gap-3">
-          {corePillars.map((pillar) => (
-            <motion.button
-              key={pillar.id}
-              onClick={() => setActivePillar(pillar.id)}
-              className={`flex items-center gap-5 p-5 rounded-2xl text-left border transition-all ${
-                activePillar === pillar.id
-                  ? "bg-amber-500/[0.08] border-amber-500/30 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
-                  : "bg-zinc-900/10 border-white/[0.04] text-zinc-400 hover:bg-zinc-900/30"
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
+        <div className="relative">
+          <div
+            className={`h-3 ${darkMode ? "bg-zinc-800" : "bg-gray-200"} rounded-full overflow-hidden`}
+          >
+            <div
+              className="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full transition-all duration-1000"
+              style={{ width: "65%" }}
+            />
+          </div>
+          <div
+            className={`flex justify-between mt-2 text-xs ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
+          >
+            <span>Starter</span>
+            <span>Silver</span>
+            <span>Gold</span>
+            <span>Platinum</span>
+            <span>Diamond</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mt-4">
+          {["Starter", "Silver", "Gold", "Platinum", "Diamond"].map(
+            (tier, i) => (
               <div
-                className={`p-2.5 rounded-xl border transition-colors ${
-                  activePillar === pillar.id
-                    ? "bg-amber-500 text-black border-amber-400"
-                    : "bg-zinc-950 text-zinc-500 border-white/[0.05]"
+                key={i}
+                className={`px-3 py-2 rounded-xl text-center text-xs font-medium ${
+                  i <= 2
+                    ? darkMode
+                      ? "bg-amber-500/20 text-amber-400 border border-amber-500/20"
+                      : "bg-amber-50 text-amber-600 border border-amber-200"
+                    : darkMode
+                      ? "bg-zinc-800/50 text-zinc-500"
+                      : "bg-gray-100 text-gray-400"
                 }`}
               >
-                <pillar.icon className="w-5 h-5" />
+                {tier}
+                {i <= 2 && (
+                  <CheckCircle
+                    className={`w-3 h-3 inline ml-1 ${darkMode ? "text-amber-400" : "text-amber-600"}`}
+                  />
+                )}
               </div>
-              <span className="font-display font-medium text-sm tracking-wide">
-                {pillar.label}
-              </span>
-            </motion.button>
-          ))}
-        </div>
-
-        <div className="lg:col-span-7 bg-zinc-900/10 border border-white/[0.04] rounded-[32px] p-8 lg:p-12 min-h-[340px] flex items-center relative overflow-hidden backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)]">
-          <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-500/[0.02] rounded-full blur-3xl pointer-events-none" />
-          <AnimatePresence mode="wait">
-            {corePillars.map(
-              (pillar) =>
-                pillar.id === activePillar && (
-                  <motion.div
-                    key={pillar.id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="space-y-6"
-                  >
-                    <motion.div
-                      className="inline-flex p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400"
-                      whileHover={{ scale: 1.05, rotate: 5 }}
-                    >
-                      <pillar.icon className="w-8 h-8" />
-                    </motion.div>
-                    <h3 className="font-display font-bold text-2xl sm:text-3xl text-white">
-                      {pillar.label}
-                    </h3>
-                    <p className="font-body text-zinc-400 text-sm sm:text-base leading-relaxed font-light max-w-xl">
-                      {pillar.desc}
-                    </p>
-                  </motion.div>
-                ),
-            )}
-          </AnimatePresence>
+            ),
+          )}
         </div>
       </div>
-    </section>
-  );
-}
 
-function DeviceShowcase() {
-  const [activeTab, setActiveTab] = useState("Phones");
-  const deviceKeys = Object.keys(devices);
-  const currentDevice = devices[activeTab];
-  const DeviceIcon = currentDevice.icon;
-
-  return (
-    <section
-      id="showcase"
-      className="py-32 border-t border-white/[0.06] bg-gradient-to-b from-transparent to-slate-950/40 relative"
-    >
-      <div className="container mx-auto px-6 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <div className="lg:col-span-5 space-y-8">
-            <motion.div
-              className="space-y-2"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+      {/* Partner Advantages */}
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Equity Partner Advantages
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          {[
+            {
+              icon: Shield,
+              title: "Fractional Equity",
+              desc: "Own fractional equity in sovereign Web3 hardware built on steel & silicon",
+            },
+            {
+              icon: Smartphone,
+              title: "Early Access",
+              desc: "Early access to AfriTek Phone Pro fleet allocations",
+            },
+            {
+              icon: Crown,
+              title: "Priority Allocation",
+              desc: "Priority allocation on AfriTek Phone Pro units",
+            },
+            {
+              icon: BarChart3,
+              title: "On-Chain Earnings",
+              desc: "Web3-integrated earnings tracked on-chain",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className={`flex items-start gap-3 p-4 ${darkMode ? "bg-zinc-800/50 hover:bg-zinc-800" : "bg-gray-50 hover:bg-amber-50"} rounded-xl transition-colors`}
             >
-              <span className="text-xs uppercase font-bold text-amber-500 tracking-[0.3em] font-display">
-                PREMIUM HARDWARE
-              </span>
-              <h2 className="font-display text-3xl sm:text-5xl font-bold text-white">
-                The Fleet of Sovereignty
-              </h2>
-            </motion.div>
-
-            <motion.div
-              className="flex flex-wrap gap-2 p-1.5 bg-zinc-950/60 border border-white/[0.05] rounded-2xl max-w-md"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              {deviceKeys.map((key) => {
-                const Icon = devices[key].icon;
-                return (
-                  <motion.button
-                    key={key}
-                    onClick={() => setActiveTab(key)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wider uppercase transition-all ${
-                      activeTab === key
-                        ? "bg-white/[0.06] text-amber-400 shadow-sm border border-white/[0.05]"
-                        : "text-zinc-500 hover:text-zinc-300"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {key}
-                  </motion.button>
-                );
-              })}
-            </motion.div>
-
-            <motion.div
-              className="space-y-4 pt-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <h3 className="font-display font-bold text-2xl text-white">
-                {currentDevice.name}
-              </h3>
-              <ul className="space-y-3">
-                {currentDevice.specs.map((spec, i) => (
-                  <motion.li
-                    key={i}
-                    className="flex items-center gap-3 text-sm text-zinc-400 font-body font-light"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + i * 0.1 }}
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                    {spec}
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="lg:col-span-7 flex justify-center lg:justify-end"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, type: "spring" }}
-          >
-            <div className="relative w-full max-w-md aspect-[4/5] bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 rounded-[40px] border border-white/[0.08] p-6 shadow-2xl flex flex-col justify-between overflow-hidden backdrop-blur-xl group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/[0.03] rounded-full blur-3xl group-hover:bg-amber-500/[0.05] transition-colors duration-500" />
-
-              <div className="flex justify-between items-center border-b border-white/[0.04] pb-4 z-10">
-                <div className="flex items-center gap-2">
-                  <DeviceIcon className="w-4 h-4 text-amber-500" />
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-400 font-display">
-                    {currentDevice.imageText}
-                  </span>
-                </div>
-                <span className="text-[9px] uppercase tracking-widest text-zinc-600 bg-white/[0.02] px-2 py-0.5 rounded-full border border-white/[0.04]">
-                  SECURE OS READY
-                </span>
-              </div>
-
-              <div className="my-auto flex flex-col items-center justify-center p-8 relative">
-                <motion.div
-                  key={activeTab}
-                  initial={{ scale: 0.9, opacity: 0, rotateY: -15 }}
-                  animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="w-48 h-64 bg-gradient-to-tr from-zinc-950 to-zinc-900 border border-white/[0.08] rounded-2xl flex flex-col items-center justify-center gap-4 relative shadow-2xl shadow-black preserve-3d"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/[0.01] to-amber-500/[0.03] rounded-2xl pointer-events-none" />
-                  <DeviceIcon className="w-12 h-12 text-amber-500/80 drop-shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse" />
-                  <div className="w-24 h-1 bg-white/[0.05] rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-amber-500"
-                      initial={{ width: "0%" }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 1, delay: 0.2 }}
-                    />
-                  </div>
-                </motion.div>
-              </div>
-
-              <div className="border-t border-white/[0.04] pt-4 flex justify-between items-center text-[10px] font-display text-zinc-500 uppercase tracking-widest z-10">
-                <span>SYSTEM DISKS: ENCRYPTED</span>
-                <motion.span
-                  className="text-emerald-500 font-semibold flex items-center gap-1"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                  ONLINE
-                </motion.span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function InvestmentCalculator() {
-  const [investment, setInvestment] = useState(1000);
-  const sharePrice = 100;
-  const units = Math.floor(investment / sharePrice);
-  const estimatedYield = (units * 12.5).toFixed(2);
-
-  return (
-    <section
-      id="investment"
-      className="py-32 border-t border-white/[0.06] relative"
-    >
-      <div className="container mx-auto px-6 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-        <motion.div
-          className="lg:col-span-5 space-y-8"
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="space-y-2">
-            <span className="text-xs uppercase font-bold text-amber-500 tracking-[0.3em] font-display">
-              EQUITY CAPITAL PORTAL
-            </span>
-            <h2 className="font-display text-3xl sm:text-5xl font-bold text-white">
-              Secure Your Fractional Allocation
-            </h2>
-          </div>
-          <p className="font-body text-zinc-400 text-base font-light leading-relaxed">
-            Participate instantly in our tokenized seed framework. Your capital
-            injection maps directly to asset deployment pipelines overseen by
-            accredited tier-1 financial custody partners.
-          </p>
-
-          <div className="space-y-3 bg-zinc-900/10 border border-white/[0.04] p-6 rounded-2xl backdrop-blur-md">
-            <div className="flex justify-between text-xs tracking-wider uppercase font-display font-semibold">
-              <span className="text-zinc-400">Seed Round Pool</span>
-              <span className="text-amber-400">74.2% Allocated</span>
-            </div>
-            <div className="w-full h-2 bg-zinc-950 rounded-full overflow-hidden border border-white/[0.05]">
-              <motion.div
-                className="h-full bg-gradient-to-r from-amber-500 to-amber-600"
-                initial={{ width: "0%" }}
-                whileInView={{ width: "74.2%" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-              />
-            </div>
-            <div className="flex justify-between text-[10px] text-zinc-500 font-medium">
-              <span>Hardcap: $2.5M USD</span>
-              <span>Remaining: $645,000</span>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="lg:col-span-7"
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="bg-gradient-to-b from-zinc-900/40 to-zinc-950/60 border border-white/[0.08] rounded-[32px] p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
-
-            <div className="flex items-center gap-3 border-b border-white/[0.05] pb-6 mb-8">
-              <div className="bg-amber-500/10 text-amber-400 p-2.5 rounded-xl border border-amber-500/20">
-                <Calculator className="w-5 h-5" />
+              <div
+                className={`p-2 rounded-lg ${darkMode ? "bg-amber-500/20 text-amber-400" : "bg-amber-100 text-amber-600"} flex-shrink-0`}
+              >
+                <item.icon className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-display font-bold text-lg text-white">
-                  Allocation Pricing Matrix
+                <h4
+                  className={`font-medium text-sm ${darkMode ? "text-white" : "text-gray-900"}`}
+                >
+                  {item.title}
                 </h4>
-                <p className="text-[11px] text-zinc-500 font-body">
-                  Real-time valuation parameters linked to Seed phase units.
+                <p
+                  className={`text-xs mt-0.5 ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
+                >
+                  {item.desc}
                 </p>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-xs tracking-wider uppercase font-display font-semibold">
-                  <span className="text-zinc-400">Commitment Volume</span>
-                  <motion.span
-                    className="text-amber-400 text-sm font-bold"
-                    key={investment}
-                    initial={{ scale: 1.2 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.2 }}
+  const renderPortfolio = () => (
+    <div className="space-y-6">
+      <div
+        className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? "" : ""}`}
+      >
+        <div>
+          <h1
+            className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Portfolio
+          </h1>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Your investments and commission earnings
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            className={`px-4 py-2 ${darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"} rounded-xl text-sm transition-colors flex items-center gap-2`}
+          >
+            <Filter className="w-4 h-4" />
+            Filter
+          </button>
+          <button className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-xl text-sm hover:bg-amber-600 transition-colors flex items-center gap-2">
+            <Download className="w-4 h-4" />
+            Export
+          </button>
+        </div>
+      </div>
+
+      {/* Investment Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {investments.map((inv) => {
+          const Icon = inv.icon;
+          const statusColors = {
+            active: darkMode
+              ? "bg-green-500/20 text-green-400 border-green-500/20"
+              : "bg-green-50 text-green-600 border-green-200",
+            pending: darkMode
+              ? "bg-amber-500/20 text-amber-400 border-amber-500/20"
+              : "bg-amber-50 text-amber-600 border-amber-200",
+            completed: darkMode
+              ? "bg-blue-500/20 text-blue-400 border-blue-500/20"
+              : "bg-blue-50 text-blue-600 border-blue-200",
+          };
+          return (
+            <div
+              key={inv.id}
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-gray-200 hover:shadow-lg"} border rounded-2xl p-6 transition-all`}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`p-2 rounded-xl ${darkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-50 text-amber-600"}`}
                   >
-                    ${investment.toLocaleString()} USD
-                  </motion.span>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className={darkMode ? "text-white" : "text-gray-900"}>
+                      {inv.name}
+                    </h4>
+                    <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                      {inv.date}
+                    </p>
+                  </div>
                 </div>
-                <input
-                  type="range"
-                  min="100"
-                  max="50000"
-                  step="100"
-                  value={investment}
-                  onChange={(e) => setInvestment(Number(e.target.value))}
-                  className="w-full accent-amber-500 h-1.5 bg-zinc-950 rounded-lg cursor-pointer border border-white/[0.05]"
-                />
-                <div className="flex justify-between text-[9px] uppercase tracking-widest text-zinc-600 font-semibold font-display">
-                  <span>Min: $100</span>
-                  <span>Max: $50,000</span>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium border ${statusColors[inv.status]}`}
+                >
+                  {inv.status}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    Amount
+                  </p>
+                  <p className={darkMode ? "text-white" : "text-gray-900"}>
+                    ${inv.amount.toLocaleString()}
+                  </p>
+                </div>
+                <div>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    Returns
+                  </p>
+                  <p className="text-green-500 font-semibold">
+                    ${inv.returns.toLocaleString()}
+                  </p>
+                </div>
+                <div>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    Yield
+                  </p>
+                  <p className="text-amber-500 font-semibold">{inv.yield}%</p>
                 </div>
               </div>
+            </div>
+          );
+        })}
+      </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                <motion.div
-                  className="bg-zinc-950/60 border border-white/[0.04] p-5 rounded-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]"
-                  whileHover={{
-                    scale: 1.02,
-                    borderColor: "rgba(245,158,11,0.2)",
-                  }}
-                >
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-display font-medium block mb-1">
-                    Tokenized Corporate Shares
-                  </span>
-                  <div className="text-xl font-display font-bold text-white flex items-baseline gap-1.5">
-                    <span>{units}</span>
-                    <span className="text-xs font-normal text-zinc-500">
-                      Equity Units
-                    </span>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="bg-zinc-950/60 border border-white/[0.04] p-5 rounded-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]"
-                  whileHover={{
-                    scale: 1.02,
-                    borderColor: "rgba(245,158,11,0.2)",
-                  }}
-                >
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-display font-medium block mb-1">
-                    Projected Annual Node Yield
-                  </span>
-                  <div className="text-xl font-display font-bold text-amber-400 flex items-baseline gap-1.5">
-                    <span>${estimatedYield}</span>
-                    <span className="text-xs font-normal text-zinc-500">
-                      USD / Yr
-                    </span>
-                  </div>
-                </motion.div>
+      {/* Commissions */}
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+            Commission Earnings
+          </h3>
+          <span className="text-amber-500 font-bold">$4,600 Total</span>
+        </div>
+        <div className="space-y-3">
+          {commissions.map((comm) => (
+            <div
+              key={comm.id}
+              className={`flex items-center justify-between p-3 ${darkMode ? "bg-zinc-800/50" : "bg-gray-50"} rounded-xl`}
+            >
+              <div>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {comm.source}
+                </p>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  {comm.date}
+                </p>
               </div>
+              <div className="flex items-center gap-3">
+                <span className="text-green-500 font-semibold">
+                  +${comm.amount.toLocaleString()}
+                </span>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    comm.status === "paid"
+                      ? darkMode
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-green-50 text-green-600"
+                      : darkMode
+                        ? "bg-amber-500/20 text-amber-400"
+                        : "bg-amber-50 text-amber-600"
+                  }`}
+                >
+                  {comm.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
-              <motion.button
-                className="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold font-display text-xs tracking-widest uppercase rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
-                whileHover={{
-                  scale: 1.02,
-                  boxShadow: "0 10px 40px rgba(245,158,11,0.3)",
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Gift className="w-4 h-4" /> Lock Asset Allocation
-              </motion.button>
+  const renderDividends = () => (
+    <div className="space-y-6">
+      <div
+        className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? "" : ""}`}
+      >
+        <div>
+          <h1
+            className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Dividends
+          </h1>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Manage your dividend earnings
+          </p>
+        </div>
+      </div>
+
+      {/* Balance Card */}
+      <div
+        className={`bg-gradient-to-br ${darkMode ? "from-amber-500/10 via-amber-600/5 to-transparent border-amber-500/20" : "from-amber-50 via-amber-100/5 to-white border-amber-200"} border rounded-2xl p-8`}
+      >
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              Available Balance
+            </p>
+            <p
+              className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+            >
+              $23,450
+            </p>
+            <div className="flex items-center gap-4 mt-2">
+              <span className="text-green-500 text-sm">
+                +$12,800 this quarter
+              </span>
+              <span className={darkMode ? "text-zinc-500" : "text-gray-400"}>
+                Total Earned: $68,400
+              </span>
             </div>
           </div>
-        </motion.div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div
+              className={`flex items-center gap-2 ${darkMode ? "bg-zinc-800/50 border-zinc-700" : "bg-white border-gray-200"} rounded-xl px-4 py-2 border`}
+            >
+              <input
+                type="text"
+                value={withdrawAmount}
+                onChange={(e) => setWithdrawAmount(e.target.value)}
+                placeholder="Amount"
+                className={`bg-transparent ${darkMode ? "text-white placeholder:text-zinc-500" : "text-gray-900 placeholder:text-gray-400"} w-24 outline-none text-sm`}
+              />
+              <button className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg text-sm hover:bg-amber-600 transition-colors">
+                Withdraw
+              </button>
+            </div>
+            <button
+              className={`px-4 py-2 ${darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"} rounded-xl text-sm transition-colors flex items-center gap-2`}
+            >
+              <Clock className="w-4 h-4" />
+              History
+            </button>
+          </div>
+        </div>
       </div>
-    </section>
-  );
-}
 
-function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(null);
+      {/* Transaction History */}
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Transaction History
+        </h3>
+        {dividendTransactions.length > 0 ? (
+          <div className="space-y-3 mt-4">
+            {dividendTransactions.map((tx) => (
+              <div
+                key={tx.id}
+                className={`flex items-center justify-between p-3 ${darkMode ? "bg-zinc-800/50" : "bg-gray-50"} rounded-xl`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`p-2 rounded-xl ${
+                      tx.type === "dividend"
+                        ? darkMode
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-green-50 text-green-600"
+                        : darkMode
+                          ? "bg-blue-500/10 text-blue-400"
+                          : "bg-blue-50 text-blue-600"
+                    }`}
+                  >
+                    {tx.type === "dividend" ? (
+                      <TrendingUp className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpRight className="w-4 h-4" />
+                    )}
+                  </div>
+                  <div>
+                    <p className={darkMode ? "text-white" : "text-gray-900"}>
+                      {tx.description}
+                    </p>
+                    <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                      {tx.date}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`font-semibold ${
+                      tx.type === "dividend"
+                        ? "text-green-500"
+                        : "text-blue-500"
+                    }`}
+                  >
+                    {tx.type === "dividend" ? "+" : "-"}$
+                    {tx.amount.toLocaleString()}
+                  </span>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      tx.status === "completed"
+                        ? darkMode
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-green-50 text-green-600"
+                        : tx.status === "pending"
+                          ? darkMode
+                            ? "bg-amber-500/20 text-amber-400"
+                            : "bg-amber-50 text-amber-600"
+                          : darkMode
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-red-50 text-red-600"
+                    }`}
+                  >
+                    {tx.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <Wallet
+              className={`w-12 h-12 ${darkMode ? "text-zinc-700" : "text-gray-300"} mx-auto mb-4`}
+            />
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              No transactions yet
+            </p>
+            <p className={darkMode ? "text-zinc-500" : "text-gray-400"}>
+              Your dividend transactions will appear here
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderSupport = () => (
+    <div className="space-y-6">
+      <div>
+        <h1
+          className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+        >
+          Support Center
+        </h1>
+        <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+          Get help with your account and investments
+        </p>
+      </div>
+
+      {/* Contact Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          className={`${darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-gray-200 hover:shadow-lg"} border rounded-2xl p-6 text-center transition-all`}
+        >
+          <div
+            className={`inline-flex p-4 rounded-xl ${darkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-50 text-amber-600"} mb-4`}
+          >
+            <Phone className="w-6 h-6" />
+          </div>
+          <h4 className={darkMode ? "text-white" : "text-gray-900"}>
+            Phone Support
+          </h4>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Available 24/7
+          </p>
+          <p className="text-amber-500 font-semibold mt-2">+1 (800) 555-0199</p>
+        </div>
+        <div
+          className={`${darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-gray-200 hover:shadow-lg"} border rounded-2xl p-6 text-center transition-all`}
+        >
+          <div
+            className={`inline-flex p-4 rounded-xl ${darkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-50 text-amber-600"} mb-4`}
+          >
+            <Mail className="w-6 h-6" />
+          </div>
+          <h4 className={darkMode ? "text-white" : "text-gray-900"}>
+            Email Support
+          </h4>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Response within 24hrs
+          </p>
+          <p className="text-amber-500 font-semibold mt-2">
+            support@afritek.com
+          </p>
+        </div>
+      </div>
+
+      {/* Support Tickets */}
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Support Tickets
+        </h3>
+        {supportTickets.map((ticket) => (
+          <div
+            key={ticket.id}
+            className={`flex items-center justify-between p-3 ${darkMode ? "bg-zinc-800/50" : "bg-gray-50"} rounded-xl mb-2`}
+          >
+            <div>
+              <p className={darkMode ? "text-white" : "text-gray-900"}>
+                {ticket.subject}
+              </p>
+              <div className="flex items-center gap-3 mt-1">
+                <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  {ticket.date}
+                </span>
+                <span className={darkMode ? "text-zinc-500" : "text-gray-400"}>
+                  •
+                </span>
+                <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  {ticket.category}
+                </span>
+              </div>
+            </div>
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                ticket.status === "open"
+                  ? darkMode
+                    ? "bg-red-500/20 text-red-400 border-red-500/20"
+                    : "bg-red-50 text-red-600 border-red-200"
+                  : ticket.status === "in-progress"
+                    ? darkMode
+                      ? "bg-amber-500/20 text-amber-400 border-amber-500/20"
+                      : "bg-amber-50 text-amber-600 border-amber-200"
+                    : darkMode
+                      ? "bg-green-500/20 text-green-400 border-green-500/20"
+                      : "bg-green-50 text-green-600 border-green-200"
+              }`}
+            >
+              {ticket.status}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Ticket Form */}
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Submit a Ticket
+        </h3>
+        <form className="space-y-4 mt-4">
+          <div>
+            <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+              Subject
+            </label>
+            <input
+              type="text"
+              value={supportSubject}
+              onChange={(e) => setSupportSubject(e.target.value)}
+              placeholder="Brief description of your issue"
+              className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+            />
+          </div>
+          <div>
+            <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+              Category
+            </label>
+            <select
+              value={supportCategory}
+              onChange={(e) => setSupportCategory(e.target.value)}
+              className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+            >
+              <option value="general">General Inquiry</option>
+              <option value="investment">Investment</option>
+              <option value="account">Account</option>
+              <option value="finance">Finance</option>
+              <option value="technical">Technical</option>
+            </select>
+          </div>
+          <div>
+            <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+              Message
+            </label>
+            <textarea
+              value={supportMessage}
+              onChange={(e) => setSupportMessage(e.target.value)}
+              placeholder="Describe your issue in detail..."
+              rows={4}
+              className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
+            />
+          </div>
+          <button className="w-full px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-colors flex items-center justify-center gap-2">
+            <Send className="w-4 h-4" />
+            Submit Ticket
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+
+  const renderProfile = () => (
+    <div className="space-y-6">
+      <div>
+        <h1
+          className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+        >
+          Profile
+        </h1>
+        <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+          Manage your account settings
+        </p>
+      </div>
+
+      {/* Profile Hero */}
+      <div
+        className={`bg-gradient-to-br ${darkMode ? "from-amber-500/10 via-amber-600/5 to-transparent border-amber-500/20" : "from-amber-50 via-amber-100/5 to-white border-amber-200"} border rounded-2xl p-8`}
+      >
+        <div className="flex flex-col md:flex-row md:items-center gap-6">
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-3xl font-bold text-white">
+            {userData.avatar}
+          </div>
+          <div className="flex-1">
+            <h2
+              className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+            >
+              {userData.name}
+            </h2>
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              {userData.email}
+            </p>
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              <span
+                className={`px-3 py-1 ${darkMode ? "bg-amber-500/20 text-amber-400 border-amber-500/20" : "bg-amber-50 text-amber-600 border-amber-200"} rounded-full text-xs font-medium border`}
+              >
+                {userData.tier}
+              </span>
+              <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Joined {userData.joinedDate}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {!isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className={`px-4 py-2 ${darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"} rounded-xl text-sm transition-colors flex items-center gap-2`}
+              >
+                <Edit className="w-4 h-4" />
+                Edit Profile
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Profile Sub-tabs */}
+      <div
+        className={`flex gap-2 border-b ${darkMode ? "border-zinc-800" : "border-gray-200"}`}
+      >
+        {["overview", "edit", "statistics"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => {
+              setProfileSubTab(tab);
+              if (tab !== "edit") setIsEditing(false);
+            }}
+            className={`px-4 py-2 text-sm font-medium transition-all border-b-2 ${
+              profileSubTab === tab
+                ? "text-amber-500 border-amber-500"
+                : darkMode
+                  ? "text-zinc-400 border-transparent hover:text-zinc-300"
+                  : "text-gray-500 border-transparent hover:text-gray-700"
+            }`}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Profile Content */}
+      <div>
+        {profileSubTab === "overview" && (
+          <div
+            className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 space-y-4`}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Full Name
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.name}
+                </p>
+              </div>
+              <div>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Email
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.email}
+                </p>
+              </div>
+              <div>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Phone
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.phone}
+                </p>
+              </div>
+              <div>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Address
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.address}
+                </p>
+              </div>
+            </div>
+            <div
+              className={`pt-4 ${darkMode ? "border-t border-zinc-800" : "border-t border-gray-200"}`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Bio
+              </p>
+              <p className={darkMode ? "text-white" : "text-gray-900"}>
+                {profileData.bio}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {profileSubTab === "edit" && (
+          <div
+            className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+          >
+            <form className="space-y-4">
+              <div>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={profileData.name}
+                  onChange={handleProfileChange}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                />
+              </div>
+              <div>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={profileData.email}
+                  onChange={handleProfileChange}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                />
+              </div>
+              <div>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={profileData.phone}
+                  onChange={handleProfileChange}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                />
+              </div>
+              <div>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={profileData.address}
+                  onChange={handleProfileChange}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                />
+              </div>
+              <div>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Bio
+                </label>
+                <textarea
+                  name="bio"
+                  value={profileData.bio}
+                  onChange={handleProfileChange}
+                  rows={3}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleSaveProfile}
+                className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-colors flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                Save Changes
+              </button>
+            </form>
+          </div>
+        )}
+
+        {profileSubTab === "statistics" && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 text-center`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Total Invested
+              </p>
+              <p
+                className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mt-1`}
+              >
+                $245,000
+              </p>
+            </div>
+            <div
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 text-center`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Total Returns
+              </p>
+              <p className="text-2xl font-bold text-green-500 mt-1">$68,400</p>
+            </div>
+            <div
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 text-center`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                ROI
+              </p>
+              <p className="text-2xl font-bold text-amber-500 mt-1">27.9%</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   return (
-    <section className="py-32 border-t border-white/[0.06] relative">
-      <div className="container mx-auto px-6 lg:px-16 max-w-4xl">
-        <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="text-xs uppercase font-bold text-amber-500 tracking-[0.3em] font-display">
-            INFORMATION HUB
-          </span>
-          <h2 className="font-display text-3xl sm:text-5xl font-bold text-white mt-3">
-            System FAQs & Protocols
-          </h2>
-        </motion.div>
-
-        <div className="space-y-4">
-          {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <motion.div
-                key={index}
-                className="bg-zinc-900/10 border border-white/[0.04] rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ borderColor: "rgba(245,158,11,0.15)" }}
+    <div className={`min-h-screen ${darkMode ? "bg-[#030009]" : "bg-gray-50"}`}>
+      {/* ====== SIDEBAR ====== */}
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 ${
+          darkMode
+            ? "bg-zinc-950 border-r border-zinc-800"
+            : "bg-white border-r border-gray-200"
+        } z-50 transform transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div
+            className={`flex items-center gap-3 p-6 ${darkMode ? "border-b border-zinc-800" : "border-b border-gray-200"}`}
+          >
+            <div className="bg-linear-to-br from-amber-400 to-amber-600 text-black p-1.5 rounded-xl shadow-lg shadow-amber-500/10">
+              <img src={afriTech} alt="" className="w-10 h-7 rounded-md" />
+            </div>
+            <div>
+              <span
+                className={`font-bold text-lg ${darkMode ? "text-white" : "text-gray-900"}`}
               >
+                AfriTek
+              </span>
+              <span className="block text-[10px] text-amber-500 uppercase tracking-wider">
+                Investor Portal
+              </span>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = currentTab === tab.id;
+              return (
                 <button
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full p-6 text-left flex justify-between items-center gap-6"
+                  key={tab.id}
+                  onClick={() => {
+                    setCurrentTab(tab.id);
+                    setSidebarOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive
+                      ? darkMode
+                        ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                        : "bg-amber-50 text-amber-600 border border-amber-200"
+                      : darkMode
+                        ? "text-zinc-400 hover:bg-zinc-800/50"
+                        : "text-gray-600 hover:bg-gray-100"
+                  }`}
                 >
-                  <span className="font-display font-bold text-base sm:text-lg text-white">
-                    {faq.question}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ChevronDown
-                      className={`w-5 h-5 ${isOpen ? "text-amber-500" : "text-zinc-400"}`}
+                  <Icon className="w-5 h-5" />
+                  <span className="font-medium text-sm">{tab.label}</span>
+                  {isActive && (
+                    <div
+                      className={`ml-auto w-1.5 h-8 rounded-full ${darkMode ? "bg-amber-400" : "bg-amber-500"}`}
                     />
-                  </motion.div>
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                    >
-                      <div className="px-6 pb-6 pt-2 border-t border-white/[0.02] text-sm sm:text-base text-zinc-400 font-body font-light leading-relaxed">
-                        {faq.answer}
-                      </div>
-                    </motion.div>
                   )}
-                </AnimatePresence>
-              </motion.div>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Bottom */}
+          <div
+            className={`p-4 ${darkMode ? "border-t border-zinc-800" : "border-t border-gray-200"} space-y-3`}
+          >
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
+                darkMode
+                  ? "hover:bg-zinc-800 text-zinc-400"
+                  : "hover:bg-gray-100 text-gray-600"
+              }`}
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+              <span className="text-sm">
+                {darkMode ? "Light Mode" : "Dark Mode"}
+              </span>
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
+                darkMode
+                  ? "hover:bg-zinc-800 text-red-400"
+                  : "hover:bg-gray-100 text-red-500"
+              }`}
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="text-sm">Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* ====== MOBILE HEADER ====== */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-40 ${
+          darkMode
+            ? "bg-zinc-950/90 border-b border-zinc-800"
+            : "bg-white/90 border-b border-gray-200"
+        } backdrop-blur-xl lg:hidden`}
+      >
+        <div className="flex items-center justify-between p-4">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className={`p-2 rounded-xl ${darkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"} transition-colors`}
+          >
+            <Menu className={darkMode ? "text-white" : "text-gray-900"} />
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="bg-gradient-to-br from-amber-400 to-amber-600 p-1.5 rounded-lg">
+              <span className="text-white font-bold text-sm">A</span>
+            </div>
+            <span
+              className={`font-bold text-sm ${darkMode ? "text-white" : "text-gray-900"}`}
+            >
+              AfriTek
+            </span>
+          </div>
+          <div className="w-10" />
+        </div>
+      </header>
+
+      {/* ====== MAIN CONTENT ====== */}
+      <main className={`lg:ml-64 pt-16 lg:pt-0 min-h-screen pb-24 lg:pb-0`}>
+        <div className="p-4 md:p-8 max-w-7xl mx-auto">
+          {currentTab === "overview" && renderOverview()}
+          {currentTab === "portfolio" && renderPortfolio()}
+          {currentTab === "dividends" && renderDividends()}
+          {currentTab === "support" && renderSupport()}
+          {currentTab === "profile" && renderProfile()}
+        </div>
+      </main>
+
+      {/* ====== MOBILE BOTTOM NAV ====== */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-40 ${
+          darkMode
+            ? "bg-zinc-950 border-t border-zinc-800"
+            : "bg-white border-t border-gray-200"
+        } lg:hidden`}
+      >
+        <div className="flex items-center justify-around p-2">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = currentTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setCurrentTab(tab.id)}
+                className={`flex flex-col items-center gap-0.5 p-2 rounded-xl transition-all ${
+                  isActive
+                    ? "text-amber-500"
+                    : darkMode
+                      ? "text-zinc-500"
+                      : "text-gray-500"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span className="text-[10px] font-medium">{tab.label}</span>
+              </button>
             );
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
