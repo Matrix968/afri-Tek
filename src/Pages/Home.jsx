@@ -254,11 +254,6 @@ export default function AfriTekbileLanding() {
       href: "#investment",
     },
     {
-      name: "Dashboard",
-      href: "/dashboard",
-      isDashboard: true,
-    },
-    {
       name: "Login",
       href: "/login",
     },
