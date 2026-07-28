@@ -174,7 +174,12 @@ export const partners = [
 export const doublePartners = [...partners, ...partners];
 
 // ==================== ANIMATED COUNTER ====================
-export const AnimatedCounter = ({ value, suffix = "", prefix = "", duration = 2 }) => {
+export const AnimatedCounter = ({
+  value,
+  suffix = "",
+  prefix = "",
+  duration = 2,
+}) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
 
   return (
@@ -210,8 +215,8 @@ export const Header = ({ isActive, setIsActive, scrolled, navLinks }) => {
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <div className="border-amber-400 p-0.5 border-2 text-black rounded-lg shadow-lg shadow-amber-500/10">
-            <img src={afriTech} alt="" className="w-13 h-10 rounded-md" />
+          <div className=" text-black rounded-lg border-3 w-fit h-fit border-amber-400">
+            <img src={afriTech} alt="" className="w-12 h-10 rounded-md" />
           </div>
           <div>
             <span className="font-display font-bold text-lg tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
@@ -781,7 +786,10 @@ export const DeviceShowcase = () => {
 // ==================== FEATURES SECTION ====================
 export const FeaturesSection = () => {
   return (
-    <section id="technology" className="py-32 bg-slate-950/20 relative overflow-hidden">
+    <section
+      id="technology"
+      className="py-32 bg-slate-950/20 relative overflow-hidden"
+    >
       <div className="absolute top-1/2 left-10 -translate-y-1/2 w-10 h-100 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="container mx-auto px-6 lg:px-16">
@@ -1141,8 +1149,8 @@ export const Footer = () => {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-3">
-            <div className="border-amber-400 p-0.5 border-2 text-black rounded-lg shadow-lg shadow-amber-500/10">
-              <img src={afriTech} alt="" className="w-13 h-10 rounded-md" />
+            <div className=" text-black rounded-lg border-3 w-fit h-fit border-amber-400">
+              <img src={afriTech} alt="" className="w-12 h-10 rounded-md" />
             </div>
             <span className="font-display font-bold text-xl tracking-wider text-white">
               AfriTek
@@ -1165,22 +1173,34 @@ export const Footer = () => {
           </h4>
           <ul className="space-y-3 font-body text-xs text-zinc-500">
             <li>
-              <a href="#showcase" className="hover:text-white transition-colors">
+              <a
+                href="#showcase"
+                className="hover:text-white transition-colors"
+              >
                 AfriTek Phone Prime
               </a>
             </li>
             <li>
-              <a href="#showcase" className="hover:text-white transition-colors">
+              <a
+                href="#showcase"
+                className="hover:text-white transition-colors"
+              >
                 AfriTek Titanium Laptop
               </a>
             </li>
             <li>
-              <a href="#showcase" className="hover:text-white transition-colors">
+              <a
+                href="#showcase"
+                className="hover:text-white transition-colors"
+              >
                 AfriTek Tab Horizon
               </a>
             </li>
             <li>
-              <a href="#technology" className="hover:text-white transition-colors">
+              <a
+                href="#technology"
+                className="hover:text-white transition-colors"
+              >
                 Blockchain Native Storage
               </a>
             </li>
@@ -1237,7 +1257,8 @@ export const Footer = () => {
               <Phone className="w-4 h-4 text-amber-500" /> +234 (0) 800-AfriTek
             </li>
             <li className="flex items-center gap-2.5">
-              <MapPin className="w-4 h-4 text-amber-500" /> Tech Enclave, Lagos, Nigeria
+              <MapPin className="w-4 h-4 text-amber-500" /> Tech Enclave, Lagos,
+              Nigeria
             </li>
           </ul>
         </motion.div>

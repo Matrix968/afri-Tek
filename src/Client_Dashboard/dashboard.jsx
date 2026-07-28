@@ -51,7 +51,7 @@ export default function Dashboard() {
           <div
             className={`flex items-center gap-3 p-6 ${darkMode ? "border-b border-zinc-800" : "border-b border-gray-200"}`}
           >
-            <div className="border-amber-400 border-2 text-black bg-amber-500 p-0.5 rounded-md shadow-lg shadow-amber-500/10">
+            <div className=" text-black rounded-lg border-3 w-fit h-fit border-amber-400">
               <img src={afriTech} alt="" className="w-12 h-10 rounded-md" />
             </div>
             <div>
