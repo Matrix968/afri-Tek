@@ -44,7 +44,8 @@ import {
   ArrowDownRight,
   Smartphone,
 } from "lucide-react";
-import afriTech from "../assets/afritek-logo.jpg"
+import afriTech from "../assets/afritek-logo.jpg";
+import { useNavigate } from "react-router-dom";
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -65,6 +66,8 @@ export default function Dashboard() {
     address: "123 Tech Street, Lagos, Nigeria",
     bio: "Passionate investor in African tech innovation. Believer in the future of blockchain and AI.",
   });
+
+  const navigate = useNavigate();
 
   const tabs = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -1286,7 +1289,7 @@ export default function Dashboard() {
               </span>
             </button>
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => navigate("/login")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
                 darkMode
                   ? "hover:bg-zinc-800 text-red-400"
