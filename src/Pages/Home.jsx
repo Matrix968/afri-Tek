@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   motion,
   useScroll,
@@ -12,8 +12,6 @@ import { useInView } from "react-intersection-observer";
 import {
   ArrowUpRight,
   Play,
-  Coins,
-  ShieldCheck,
   TrendingUp,
   Gem,
   Crown,
@@ -25,290 +23,27 @@ import {
   Laptop,
   Layers,
   Brain,
-  KeyRound,
-  Heart,
   MapPin,
   Phone,
   Mail,
   CheckCircle2,
   Calculator,
   Cpu,
-  HelpCircle,
   ChevronDown,
   Gift,
   Menu,
   X,
-  Sparkles,
   Award,
-  Star,
-  Rocket,
-  Globe2,
   Users,
-  Target,
-  BarChart3,
-  LineChart,
-  Wallet,
-  Fingerprint,
-  Database,
-  Cloud,
-  Server,
-  Network,
-  Radio,
-  Signal,
-  Activity,
-  Hexagon,
-  Circle,
-  Square,
-  Triangle,
-  RefreshCw,
   Clock,
-  Timer,
-  PlayCircle,
-  PauseCircle,
-  RotateCw,
-  Command,
-  Codesandbox,
-  Compass,
-  Diamond,
-  Eye,
-  Feather,
-  Filter,
-  Flame,
-  Focus,
-  Grid,
-  HardDrive,
-  Headphones,
-  Infinity,
-  Key,
-  Layers as LayersIcon,
-  Link2,
-  List,
-  Lock as LockIcon,
-  Maximize,
-  Mic,
-  Minimize,
-  Monitor,
-  Moon,
-  Music,
-  Navigation,
-  Palette,
-  Paperclip,
-  PenTool,
   Percent,
-  PieChart,
-  Pin,
-  Power,
-  Printer,
-  Puzzle,
-  Radio as RadioIcon,
-  Scissors,
-  Search,
-  Settings,
-  Share,
-  Shield as ShieldIcon,
-  Shuffle,
-  Sliders,
-  Speaker,
-  Star as StarIcon,
-  Sun,
-  SwatchBook,
-  SwitchCamera,
-  Target as TargetIcon,
-  Terminal,
-  Thermometer,
-  ThumbsUp,
-  Timer as TimerIcon,
-  ToggleLeft,
-  ToggleRight,
-  Tool,
-  Trash,
-  Trophy,
-  Umbrella,
-  Unlock,
-  Upload,
-  User,
-  UserCheck,
-  UserPlus,
-  Users as UsersIcon,
-  Video,
-  Volume2,
-  VolumeX,
-  Watch,
-  Wifi,
-  Wind,
-  Wrench,
-  X as XIcon,
-  Zap as ZapIcon,
-  ZoomIn,
-  ZoomOut,
-  AlertCircle,
-  AlertTriangle,
-  Archive,
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  AtSign,
-  Award as AwardIcon,
-  Bell,
-  Book,
-  BookOpen,
-  Box,
+  Wallet,
   Briefcase,
-  Calendar,
-  Camera,
-  Car,
-  Check,
-  CheckSquare,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
-  Clipboard,
-  Clock as ClockIcon,
-  Cloud as CloudIcon,
-  Code,
-  Coffee,
-  Compass as CompassIcon,
-  Copy,
-  CreditCard,
-  Crosshair,
-  Database as DatabaseIcon,
-  Delete,
-  Disc,
-  DollarSign,
-  Download,
-  Dribbble,
-  Droplet,
-  Edit,
-  ExternalLink,
-  FastForward,
-  Figma,
-  File,
-  Film,
-  Filter as FilterIcon,
-  Flag,
-  Folder,
-  Github,
-  Gitlab,
-  Globe,
-  Grid as GridIcon,
-  Hash,
-  Heart as HeartIcon,
-  Home,
-  Image,
-  Inbox,
-  Info,
-  Key as KeyIcon,
-  Layers as LayersIcon2,
-  Layout,
-  LifeBuoy,
-  Lightbulb,
-  Linkedin,
-  Loader,
-  Lock as LockIcon2,
-  LogIn,
-  LogOut,
-  Mail as MailIcon,
-  Map,
-  MapPin as MapPinIcon,
-  Maximize2,
-  Menu as MenuIcon,
-  MessageCircle,
-  MessageSquare,
-  Mic as MicIcon,
-  Minimize2,
-  Minus,
-  Monitor as MonitorIcon,
-  Moon as MoonIcon,
-  MoreHorizontal,
-  MoreVertical,
-  Move,
-  Music as MusicIcon,
-  Navigation as NavigationIcon,
-  Package,
-  Paperclip as PaperclipIcon,
-  Pause,
-  PenTool as PenToolIcon,
-  Percent as PercentIcon,
-  Phone as PhoneIcon,
-  PieChart as PieChartIcon,
-  Pin as PinIcon,
-  Play as PlayIcon,
-  Plus,
-  Power as PowerIcon,
-  Printer as PrinterIcon,
-  Radio as RadioIcon2,
-  RefreshCw as RefreshCwIcon,
-  Repeat,
-  Rewind,
-  Rocket as RocketIcon,
-  RotateCw as RotateCwIcon,
-  Rss,
-  Save,
-  Scissors as ScissorsIcon,
-  Search as SearchIcon,
-  Send,
-  Server as ServerIcon,
-  Settings as SettingsIcon,
-  Share as ShareIcon,
-  Shield as ShieldIcon2,
-  ShoppingBag,
-  ShoppingCart,
-  Shuffle as ShuffleIcon,
-  Sidebar,
-  Signal as SignalIcon,
-  Sliders as SlidersIcon,
-  Smartphone as SmartphoneIcon,
-  Smile,
-  Speaker as SpeakerIcon,
-  Star as StarIcon2,
-  StopCircle,
-  Sun as SunIcon,
-  Sunrise,
-  Sunset,
-  SwatchBook as SwatchBookIcon,
-  SwitchCamera as SwitchCameraIcon,
-  Tablet as TabletIcon,
-  Tag,
-  Target as TargetIcon2,
-  Terminal as TerminalIcon,
-  Thermometer as ThermometerIcon,
-  ThumbsDown,
-  ThumbsUp as ThumbsUpIcon,
-  Ticket,
-  Timer as TimerIcon2,
-  ToggleLeft as ToggleLeftIcon,
-  ToggleRight as ToggleRightIcon,
-  Tool as ToolIcon,
-  Trash as TrashIcon,
-  TrendingDown,
-  TrendingUp as TrendingUpIcon,
-  Trophy as TrophyIcon,
-  Truck,
-  Tv,
-  Umbrella as UmbrellaIcon,
-  Unlock as UnlockIcon,
-  Upload as UploadIcon,
-  User as UserIcon,
-  UserCheck as UserCheckIcon,
-  UserMinus,
-  UserPlus as UserPlusIcon,
-  Users as UsersIcon2,
-  Video as VideoIcon,
-  Volume2 as Volume2Icon,
-  VolumeX as VolumeXIcon,
-  Wallet as WalletIcon,
-  Watch as WatchIcon,
-  Wifi as WifiIcon,
-  Wind as WindIcon,
-  Wrench as WrenchIcon,
-  X as XIcon2,
-  Zap as ZapIcon2,
+  Activity,
 } from "lucide-react";
 import afriTech from "../assets/afritek-logo.jpg";
 import ReactCountUp from "react-countup";
 import CryptoAfrica from "../components/Common";
-import { href, Link } from "react-router-dom";
 
 const CountUp = ReactCountUp.default || ReactCountUp;
 
@@ -520,7 +255,7 @@ export default function AfriTekbileLanding() {
     },
     {
       name: "Dashboard",
-      href: "/dashboard", // Fixed: Now links to dashboard page
+      href: "/dashboard",
       isDashboard: true,
     },
     {
@@ -583,6 +318,7 @@ export default function AfriTekbileLanding() {
           background: radial-gradient(circle, rgba(245,158,11,0.3), transparent 70%);
         }
       `}</style>
+
       {/* Ambient backgrounds with parallax */}
       <motion.div
         className="absolute top-0 left-1/4 w-150 h-150 bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full blur-[160px] pointer-events-none"
@@ -618,6 +354,7 @@ export default function AfriTekbileLanding() {
           delay: 4,
         }}
       />
+
       {/* Floating Particles */}
       {[...Array(12)].map((_, i) => (
         <motion.div
@@ -642,6 +379,7 @@ export default function AfriTekbileLanding() {
           }}
         />
       ))}
+
       {/* --- HEADER --- */}
       <motion.header
         className={`fixed w-full top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-white/6 transition-all duration-500 ${
@@ -797,9 +535,9 @@ export default function AfriTekbileLanding() {
           </motion.a>
         </div>
       </motion.header>
+
       {/* --- HERO WITH NEON BLOCKCHAIN BACKGROUND VIDEO --- */}
       <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24">
-        {/* Background Glowing 3D Blockchain Video */}
         <div className="absolute inset-0 z-0">
           <video
             autoPlay
@@ -899,6 +637,7 @@ export default function AfriTekbileLanding() {
           </motion.div>
         </div>
       </section>
+
       {/* --- STATS COUNTER SECTION --- */}
       <section className="relative overflow-hidden py-16 border-y border-white/6 bg-slate-950/30">
         <div className="container mx-auto px-6 lg:px-16">
@@ -958,6 +697,8 @@ export default function AfriTekbileLanding() {
           </div>
         </div>
       </section>
+
+      {/* --- PRESS LOGO MARQUEE --- */}
       <section className="relative overflow-hidden bg-slate-950/40 border-y border-white/6 py-10">
         <div className="text-center mb-6">
           <motion.span
@@ -971,15 +712,13 @@ export default function AfriTekbileLanding() {
         </div>
 
         <div className="w-full relative overflow-hidden flex items-center">
-          {/* Gradient overlays */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#030009] to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#030009] to-transparent z-10 pointer-events-none" />
 
-          {/* Scrolling marquee */}
           <motion.div
             className="flex gap-24 whitespace-nowrap w-max"
             animate={{
-              x: [0, -1000], // Use pixel value instead of percentage for reliability
+              x: [0, -1000],
             }}
             transition={{
               duration: 25,
@@ -1000,12 +739,16 @@ export default function AfriTekbileLanding() {
           </motion.div>
         </div>
       </section>
+
       {/* --- VALUE PROPOSITION / PILLARS --- */}
       <PillarsSection />
+
       {/* --- PHONE SPINNING SHOWCASE SECTION --- */}
       <DeviceShowcase />
+
       {/* --- INVESTMENT / CALCULATOR / SHARES PROGRESS --- */}
       <InvestmentCalculator />
+
       {/* --- FEATURES GRID & INTERACTIVE AFRICA NODE MAP --- */}
       <section
         id="technology"
@@ -1054,6 +797,7 @@ export default function AfriTekbileLanding() {
           </div>
         </div>
       </section>
+
       {/* --- INVESTMENT CTA SECTION --- */}
       <motion.section
         className="border-t border-white/6 py-20 relative overflow-hidden"
@@ -1109,8 +853,10 @@ export default function AfriTekbileLanding() {
           </div>
         </div>
       </motion.section>
+
       {/* --- FAQ SECTION --- */}
       <FAQSection />
+
       {/* --- FOOTER --- */}
       <footer className="bg-slate-950 border-t border-white/6 py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-30" />
@@ -1258,7 +1004,7 @@ export default function AfriTekbileLanding() {
   );
 }
 
-// --- SUB-COMPONENTS (Same as before with enhanced animations) ---
+// --- SUB-COMPONENTS ---
 
 function AfricaNodeMap() {
   const nodes = [
