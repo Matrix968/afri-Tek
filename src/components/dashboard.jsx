@@ -44,7 +44,7 @@ import {
   ArrowDownRight,
   Smartphone,
 } from "lucide-react";
-
+import afriTech from "../assets/afritek-logo.jpg"
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -276,17 +276,29 @@ export default function Dashboard() {
   const renderOverview = () => (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? '' : ''}`}>
+      <div
+        className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? "" : ""}`}
+      >
         <div>
-          <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          <h1
+            className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
             Good morning, {userData.name}
           </h1>
-          <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Here's your investment overview</p>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Here's your investment overview
+          </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className={`flex items-center gap-2 px-4 py-2 border rounded-xl ${darkMode ? 'bg-amber-500/10 border-amber-500/20' : 'bg-amber-50 border-amber-200'}`}>
-            <Award className={darkMode ? 'text-amber-400' : 'text-amber-600'} />
-            <span className={`text-sm font-semibold ${darkMode ? 'text-amber-400' : 'text-amber-600'}`}>{userData.tier}</span>
+          <div
+            className={`flex items-center gap-2 px-4 py-2 border rounded-xl ${darkMode ? "bg-amber-500/10 border-amber-500/20" : "bg-amber-50 border-amber-200"}`}
+          >
+            <Award className={darkMode ? "text-amber-400" : "text-amber-600"} />
+            <span
+              className={`text-sm font-semibold ${darkMode ? "text-amber-400" : "text-amber-600"}`}
+            >
+              {userData.tier}
+            </span>
           </div>
           <button className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-xl text-sm hover:bg-amber-600 transition-colors flex items-center gap-2">
             <Plus className="w-4 h-4" />
@@ -301,28 +313,52 @@ export default function Dashboard() {
           const Icon = stat.icon;
           const isPositive = stat.change.startsWith("+");
           const colorMap = {
-            amber: darkMode ? "bg-amber-500/10 text-amber-400 border-amber-500/20" : "bg-amber-50 text-amber-600 border-amber-200",
-            green: darkMode ? "bg-green-500/10 text-green-400 border-green-500/20" : "bg-green-50 text-green-600 border-green-200",
-            blue: darkMode ? "bg-blue-500/10 text-blue-400 border-blue-500/20" : "bg-blue-50 text-blue-600 border-blue-200",
-            purple: darkMode ? "bg-purple-500/10 text-purple-400 border-purple-500/20" : "bg-purple-50 text-purple-600 border-purple-200",
-            orange: darkMode ? "bg-orange-500/10 text-orange-400 border-orange-500/20" : "bg-orange-50 text-orange-600 border-orange-200",
-            emerald: darkMode ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-emerald-50 text-emerald-600 border-emerald-200",
+            amber: darkMode
+              ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+              : "bg-amber-50 text-amber-600 border-amber-200",
+            green: darkMode
+              ? "bg-green-500/10 text-green-400 border-green-500/20"
+              : "bg-green-50 text-green-600 border-green-200",
+            blue: darkMode
+              ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+              : "bg-blue-50 text-blue-600 border-blue-200",
+            purple: darkMode
+              ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+              : "bg-purple-50 text-purple-600 border-purple-200",
+            orange: darkMode
+              ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+              : "bg-orange-50 text-orange-600 border-orange-200",
+            emerald: darkMode
+              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+              : "bg-emerald-50 text-emerald-600 border-emerald-200",
           };
-          const bgMap = darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200";
+          const bgMap = darkMode
+            ? "bg-zinc-900/50 border-zinc-800"
+            : "bg-white border-gray-200";
           return (
             <div
               key={index}
-              className={`${bgMap} border rounded-2xl p-6 hover:${darkMode ? 'border-zinc-700' : 'shadow-lg'} transition-all`}
+              className={`${bgMap} border rounded-2xl p-6 hover:${darkMode ? "border-zinc-700" : "shadow-lg"} transition-all`}
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{stat.label}</p>
-                  <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mt-1`}>{stat.value}</p>
-                  <p className={`text-xs font-medium mt-1 ${isPositive ? "text-green-500" : "text-red-500"}`}>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    {stat.label}
+                  </p>
+                  <p
+                    className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mt-1`}
+                  >
+                    {stat.value}
+                  </p>
+                  <p
+                    className={`text-xs font-medium mt-1 ${isPositive ? "text-green-500" : "text-red-500"}`}
+                  >
                     {stat.change}
                   </p>
                 </div>
-                <div className={`p-3 rounded-xl border ${colorMap[stat.color]}`}>
+                <div
+                  className={`p-3 rounded-xl border ${colorMap[stat.color]}`}
+                >
                   <Icon className="w-5 h-5" />
                 </div>
               </div>
@@ -332,26 +368,38 @@ export default function Dashboard() {
       </div>
 
       {/* Investor Tier Progress */}
-      <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <div>
-            <h3 className={darkMode ? 'text-white' : 'text-gray-900'}>Investor Tier Progress</h3>
-            <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>You're at {userData.tier} level</p>
+            <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+              Investor Tier Progress
+            </h3>
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              You're at {userData.tier} level
+            </p>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Crown className="w-4 h-4 text-amber-500" />
-            <span className={darkMode ? 'text-zinc-300' : 'text-gray-700'}>Next: Platinum Investor</span>
+            <span className={darkMode ? "text-zinc-300" : "text-gray-700"}>
+              Next: Platinum Investor
+            </span>
             <span className="text-amber-500 font-bold">$500,000</span>
           </div>
         </div>
         <div className="relative">
-          <div className={`h-3 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'} rounded-full overflow-hidden`}>
+          <div
+            className={`h-3 ${darkMode ? "bg-zinc-800" : "bg-gray-200"} rounded-full overflow-hidden`}
+          >
             <div
               className="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full transition-all duration-1000"
               style={{ width: "65%" }}
             />
           </div>
-          <div className={`flex justify-between mt-2 text-xs ${darkMode ? 'text-zinc-500' : 'text-gray-400'}`}>
+          <div
+            className={`flex justify-between mt-2 text-xs ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
+          >
             <span>Starter</span>
             <span>Silver</span>
             <span>Gold</span>
@@ -360,29 +408,39 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mt-4">
-          {["Starter", "Silver", "Gold", "Platinum", "Diamond"].map((tier, i) => (
-            <div
-              key={i}
-              className={`px-3 py-2 rounded-xl text-center text-xs font-medium ${
-                i <= 2
-                  ? darkMode 
-                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/20"
-                    : "bg-amber-50 text-amber-600 border border-amber-200"
-                  : darkMode 
-                    ? "bg-zinc-800/50 text-zinc-500"
-                    : "bg-gray-100 text-gray-400"
-              }`}
-            >
-              {tier}
-              {i <= 2 && <CheckCircle className={`w-3 h-3 inline ml-1 ${darkMode ? 'text-amber-400' : 'text-amber-600'}`} />}
-            </div>
-          ))}
+          {["Starter", "Silver", "Gold", "Platinum", "Diamond"].map(
+            (tier, i) => (
+              <div
+                key={i}
+                className={`px-3 py-2 rounded-xl text-center text-xs font-medium ${
+                  i <= 2
+                    ? darkMode
+                      ? "bg-amber-500/20 text-amber-400 border border-amber-500/20"
+                      : "bg-amber-50 text-amber-600 border border-amber-200"
+                    : darkMode
+                      ? "bg-zinc-800/50 text-zinc-500"
+                      : "bg-gray-100 text-gray-400"
+                }`}
+              >
+                {tier}
+                {i <= 2 && (
+                  <CheckCircle
+                    className={`w-3 h-3 inline ml-1 ${darkMode ? "text-amber-400" : "text-amber-600"}`}
+                  />
+                )}
+              </div>
+            ),
+          )}
         </div>
       </div>
 
       {/* Partner Advantages */}
-      <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
-        <h3 className={darkMode ? 'text-white' : 'text-gray-900'}>Equity Partner Advantages</h3>
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Equity Partner Advantages
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           {[
             {
@@ -408,14 +466,24 @@ export default function Dashboard() {
           ].map((item, i) => (
             <div
               key={i}
-              className={`flex items-start gap-3 p-4 ${darkMode ? 'bg-zinc-800/50 hover:bg-zinc-800' : 'bg-gray-50 hover:bg-amber-50'} rounded-xl transition-colors`}
+              className={`flex items-start gap-3 p-4 ${darkMode ? "bg-zinc-800/50 hover:bg-zinc-800" : "bg-gray-50 hover:bg-amber-50"} rounded-xl transition-colors`}
             >
-              <div className={`p-2 rounded-lg ${darkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'} flex-shrink-0`}>
+              <div
+                className={`p-2 rounded-lg ${darkMode ? "bg-amber-500/20 text-amber-400" : "bg-amber-100 text-amber-600"} flex-shrink-0`}
+              >
                 <item.icon className="w-5 h-5" />
               </div>
               <div>
-                <h4 className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{item.title}</h4>
-                <p className={`text-xs mt-0.5 ${darkMode ? 'text-zinc-400' : 'text-gray-500'}`}>{item.desc}</p>
+                <h4
+                  className={`font-medium text-sm ${darkMode ? "text-white" : "text-gray-900"}`}
+                >
+                  {item.title}
+                </h4>
+                <p
+                  className={`text-xs mt-0.5 ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
+                >
+                  {item.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -426,13 +494,23 @@ export default function Dashboard() {
 
   const renderPortfolio = () => (
     <div className="space-y-6">
-      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? '' : ''}`}>
+      <div
+        className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? "" : ""}`}
+      >
         <div>
-          <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Portfolio</h1>
-          <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Your investments and commission earnings</p>
+          <h1
+            className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Portfolio
+          </h1>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Your investments and commission earnings
+          </p>
         </div>
         <div className="flex items-center gap-3">
-          <button className={`px-4 py-2 ${darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'} rounded-xl text-sm transition-colors flex items-center gap-2`}>
+          <button
+            className={`px-4 py-2 ${darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"} rounded-xl text-sm transition-colors flex items-center gap-2`}
+          >
             <Filter className="w-4 h-4" />
             Filter
           </button>
@@ -448,40 +526,64 @@ export default function Dashboard() {
         {investments.map((inv) => {
           const Icon = inv.icon;
           const statusColors = {
-            active: darkMode ? "bg-green-500/20 text-green-400 border-green-500/20" : "bg-green-50 text-green-600 border-green-200",
-            pending: darkMode ? "bg-amber-500/20 text-amber-400 border-amber-500/20" : "bg-amber-50 text-amber-600 border-amber-200",
-            completed: darkMode ? "bg-blue-500/20 text-blue-400 border-blue-500/20" : "bg-blue-50 text-blue-600 border-blue-200",
+            active: darkMode
+              ? "bg-green-500/20 text-green-400 border-green-500/20"
+              : "bg-green-50 text-green-600 border-green-200",
+            pending: darkMode
+              ? "bg-amber-500/20 text-amber-400 border-amber-500/20"
+              : "bg-amber-50 text-amber-600 border-amber-200",
+            completed: darkMode
+              ? "bg-blue-500/20 text-blue-400 border-blue-500/20"
+              : "bg-blue-50 text-blue-600 border-blue-200",
           };
           return (
             <div
               key={inv.id}
-              className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700' : 'bg-white border-gray-200 hover:shadow-lg'} border rounded-2xl p-6 transition-all`}
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-gray-200 hover:shadow-lg"} border rounded-2xl p-6 transition-all`}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${darkMode ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-600'}`}>
+                  <div
+                    className={`p-2 rounded-xl ${darkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-50 text-amber-600"}`}
+                  >
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className={darkMode ? 'text-white' : 'text-gray-900'}>{inv.name}</h4>
-                    <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{inv.date}</p>
+                    <h4 className={darkMode ? "text-white" : "text-gray-900"}>
+                      {inv.name}
+                    </h4>
+                    <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                      {inv.date}
+                    </p>
                   </div>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${statusColors[inv.status]}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium border ${statusColors[inv.status]}`}
+                >
                   {inv.status}
                 </span>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Amount</p>
-                  <p className={darkMode ? 'text-white' : 'text-gray-900'}>${inv.amount.toLocaleString()}</p>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    Amount
+                  </p>
+                  <p className={darkMode ? "text-white" : "text-gray-900"}>
+                    ${inv.amount.toLocaleString()}
+                  </p>
                 </div>
                 <div>
-                  <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Returns</p>
-                  <p className="text-green-500 font-semibold">${inv.returns.toLocaleString()}</p>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    Returns
+                  </p>
+                  <p className="text-green-500 font-semibold">
+                    ${inv.returns.toLocaleString()}
+                  </p>
                 </div>
                 <div>
-                  <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Yield</p>
+                  <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                    Yield
+                  </p>
                   <p className="text-amber-500 font-semibold">{inv.yield}%</p>
                 </div>
               </div>
@@ -491,28 +593,44 @@ export default function Dashboard() {
       </div>
 
       {/* Commissions */}
-      <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
         <div className="flex items-center justify-between mb-4">
-          <h3 className={darkMode ? 'text-white' : 'text-gray-900'}>Commission Earnings</h3>
+          <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+            Commission Earnings
+          </h3>
           <span className="text-amber-500 font-bold">$4,600 Total</span>
         </div>
         <div className="space-y-3">
           {commissions.map((comm) => (
             <div
               key={comm.id}
-              className={`flex items-center justify-between p-3 ${darkMode ? 'bg-zinc-800/50' : 'bg-gray-50'} rounded-xl`}
+              className={`flex items-center justify-between p-3 ${darkMode ? "bg-zinc-800/50" : "bg-gray-50"} rounded-xl`}
             >
               <div>
-                <p className={darkMode ? 'text-white' : 'text-gray-900'}>{comm.source}</p>
-                <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{comm.date}</p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {comm.source}
+                </p>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  {comm.date}
+                </p>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-green-500 font-semibold">+${comm.amount.toLocaleString()}</span>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  comm.status === "paid"
-                    ? darkMode ? "bg-green-500/20 text-green-400" : "bg-green-50 text-green-600"
-                    : darkMode ? "bg-amber-500/20 text-amber-400" : "bg-amber-50 text-amber-600"
-                }`}>
+                <span className="text-green-500 font-semibold">
+                  +${comm.amount.toLocaleString()}
+                </span>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    comm.status === "paid"
+                      ? darkMode
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-green-50 text-green-600"
+                      : darkMode
+                        ? "bg-amber-500/20 text-amber-400"
+                        : "bg-amber-50 text-amber-600"
+                  }`}
+                >
                   {comm.status}
                 </span>
               </div>
@@ -525,38 +643,62 @@ export default function Dashboard() {
 
   const renderDividends = () => (
     <div className="space-y-6">
-      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? '' : ''}`}>
+      <div
+        className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${darkMode ? "" : ""}`}
+      >
         <div>
-          <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Dividends</h1>
-          <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Manage your dividend earnings</p>
+          <h1
+            className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Dividends
+          </h1>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Manage your dividend earnings
+          </p>
         </div>
       </div>
 
       {/* Balance Card */}
-      <div className={`bg-gradient-to-br ${darkMode ? 'from-amber-500/10 via-amber-600/5 to-transparent border-amber-500/20' : 'from-amber-50 via-amber-100/5 to-white border-amber-200'} border rounded-2xl p-8`}>
+      <div
+        className={`bg-gradient-to-br ${darkMode ? "from-amber-500/10 via-amber-600/5 to-transparent border-amber-500/20" : "from-amber-50 via-amber-100/5 to-white border-amber-200"} border rounded-2xl p-8`}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Available Balance</p>
-            <p className={`text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>$23,450</p>
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              Available Balance
+            </p>
+            <p
+              className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+            >
+              $23,450
+            </p>
             <div className="flex items-center gap-4 mt-2">
-              <span className="text-green-500 text-sm">+$12,800 this quarter</span>
-              <span className={darkMode ? 'text-zinc-500' : 'text-gray-400'}>Total Earned: $68,400</span>
+              <span className="text-green-500 text-sm">
+                +$12,800 this quarter
+              </span>
+              <span className={darkMode ? "text-zinc-500" : "text-gray-400"}>
+                Total Earned: $68,400
+              </span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className={`flex items-center gap-2 ${darkMode ? 'bg-zinc-800/50 border-zinc-700' : 'bg-white border-gray-200'} rounded-xl px-4 py-2 border`}>
+            <div
+              className={`flex items-center gap-2 ${darkMode ? "bg-zinc-800/50 border-zinc-700" : "bg-white border-gray-200"} rounded-xl px-4 py-2 border`}
+            >
               <input
                 type="text"
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
                 placeholder="Amount"
-                className={`bg-transparent ${darkMode ? 'text-white placeholder:text-zinc-500' : 'text-gray-900 placeholder:text-gray-400'} w-24 outline-none text-sm`}
+                className={`bg-transparent ${darkMode ? "text-white placeholder:text-zinc-500" : "text-gray-900 placeholder:text-gray-400"} w-24 outline-none text-sm`}
               />
               <button className="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg text-sm hover:bg-amber-600 transition-colors">
                 Withdraw
               </button>
             </div>
-            <button className={`px-4 py-2 ${darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'} rounded-xl text-sm transition-colors flex items-center gap-2`}>
+            <button
+              className={`px-4 py-2 ${darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"} rounded-xl text-sm transition-colors flex items-center gap-2`}
+            >
               <Clock className="w-4 h-4" />
               History
             </button>
@@ -565,21 +707,31 @@ export default function Dashboard() {
       </div>
 
       {/* Transaction History */}
-      <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
-        <h3 className={darkMode ? 'text-white' : 'text-gray-900'}>Transaction History</h3>
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Transaction History
+        </h3>
         {dividendTransactions.length > 0 ? (
           <div className="space-y-3 mt-4">
             {dividendTransactions.map((tx) => (
               <div
                 key={tx.id}
-                className={`flex items-center justify-between p-3 ${darkMode ? 'bg-zinc-800/50' : 'bg-gray-50'} rounded-xl`}
+                className={`flex items-center justify-between p-3 ${darkMode ? "bg-zinc-800/50" : "bg-gray-50"} rounded-xl`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${
-                    tx.type === "dividend"
-                      ? darkMode ? "bg-green-500/10 text-green-400" : "bg-green-50 text-green-600"
-                      : darkMode ? "bg-blue-500/10 text-blue-400" : "bg-blue-50 text-blue-600"
-                  }`}>
+                  <div
+                    className={`p-2 rounded-xl ${
+                      tx.type === "dividend"
+                        ? darkMode
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-green-50 text-green-600"
+                        : darkMode
+                          ? "bg-blue-500/10 text-blue-400"
+                          : "bg-blue-50 text-blue-600"
+                    }`}
+                  >
                     {tx.type === "dividend" ? (
                       <TrendingUp className="w-4 h-4" />
                     ) : (
@@ -587,23 +739,40 @@ export default function Dashboard() {
                     )}
                   </div>
                   <div>
-                    <p className={darkMode ? 'text-white' : 'text-gray-900'}>{tx.description}</p>
-                    <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{tx.date}</p>
+                    <p className={darkMode ? "text-white" : "text-gray-900"}>
+                      {tx.description}
+                    </p>
+                    <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                      {tx.date}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className={`font-semibold ${
-                    tx.type === "dividend" ? "text-green-500" : "text-blue-500"
-                  }`}>
-                    {tx.type === "dividend" ? "+" : "-"}${tx.amount.toLocaleString()}
+                  <span
+                    className={`font-semibold ${
+                      tx.type === "dividend"
+                        ? "text-green-500"
+                        : "text-blue-500"
+                    }`}
+                  >
+                    {tx.type === "dividend" ? "+" : "-"}$
+                    {tx.amount.toLocaleString()}
                   </span>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    tx.status === "completed"
-                      ? darkMode ? "bg-green-500/20 text-green-400" : "bg-green-50 text-green-600"
-                      : tx.status === "pending"
-                      ? darkMode ? "bg-amber-500/20 text-amber-400" : "bg-amber-50 text-amber-600"
-                      : darkMode ? "bg-red-500/20 text-red-400" : "bg-red-50 text-red-600"
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      tx.status === "completed"
+                        ? darkMode
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-green-50 text-green-600"
+                        : tx.status === "pending"
+                          ? darkMode
+                            ? "bg-amber-500/20 text-amber-400"
+                            : "bg-amber-50 text-amber-600"
+                          : darkMode
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-red-50 text-red-600"
+                    }`}
+                  >
                     {tx.status}
                   </span>
                 </div>
@@ -612,9 +781,15 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Wallet className={`w-12 h-12 ${darkMode ? 'text-zinc-700' : 'text-gray-300'} mx-auto mb-4`} />
-            <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>No transactions yet</p>
-            <p className={darkMode ? 'text-zinc-500' : 'text-gray-400'}>Your dividend transactions will appear here</p>
+            <Wallet
+              className={`w-12 h-12 ${darkMode ? "text-zinc-700" : "text-gray-300"} mx-auto mb-4`}
+            />
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              No transactions yet
+            </p>
+            <p className={darkMode ? "text-zinc-500" : "text-gray-400"}>
+              Your dividend transactions will appear here
+            </p>
           </div>
         )}
       </div>
@@ -624,53 +799,97 @@ export default function Dashboard() {
   const renderSupport = () => (
     <div className="space-y-6">
       <div>
-        <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Support Center</h1>
-        <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Get help with your account and investments</p>
+        <h1
+          className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+        >
+          Support Center
+        </h1>
+        <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+          Get help with your account and investments
+        </p>
       </div>
 
       {/* Contact Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700' : 'bg-white border-gray-200 hover:shadow-lg'} border rounded-2xl p-6 text-center transition-all`}>
-          <div className={`inline-flex p-4 rounded-xl ${darkMode ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-600'} mb-4`}>
+        <div
+          className={`${darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-gray-200 hover:shadow-lg"} border rounded-2xl p-6 text-center transition-all`}
+        >
+          <div
+            className={`inline-flex p-4 rounded-xl ${darkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-50 text-amber-600"} mb-4`}
+          >
             <Phone className="w-6 h-6" />
           </div>
-          <h4 className={darkMode ? 'text-white' : 'text-gray-900'}>Phone Support</h4>
-          <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Available 24/7</p>
+          <h4 className={darkMode ? "text-white" : "text-gray-900"}>
+            Phone Support
+          </h4>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Available 24/7
+          </p>
           <p className="text-amber-500 font-semibold mt-2">+1 (800) 555-0199</p>
         </div>
-        <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700' : 'bg-white border-gray-200 hover:shadow-lg'} border rounded-2xl p-6 text-center transition-all`}>
-          <div className={`inline-flex p-4 rounded-xl ${darkMode ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-600'} mb-4`}>
+        <div
+          className={`${darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-gray-200 hover:shadow-lg"} border rounded-2xl p-6 text-center transition-all`}
+        >
+          <div
+            className={`inline-flex p-4 rounded-xl ${darkMode ? "bg-amber-500/10 text-amber-400" : "bg-amber-50 text-amber-600"} mb-4`}
+          >
             <Mail className="w-6 h-6" />
           </div>
-          <h4 className={darkMode ? 'text-white' : 'text-gray-900'}>Email Support</h4>
-          <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Response within 24hrs</p>
-          <p className="text-amber-500 font-semibold mt-2">support@afritek.com</p>
+          <h4 className={darkMode ? "text-white" : "text-gray-900"}>
+            Email Support
+          </h4>
+          <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+            Response within 24hrs
+          </p>
+          <p className="text-amber-500 font-semibold mt-2">
+            support@afritek.com
+          </p>
         </div>
       </div>
 
       {/* Support Tickets */}
-      <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
-        <h3 className={darkMode ? 'text-white' : 'text-gray-900'}>Support Tickets</h3>
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Support Tickets
+        </h3>
         {supportTickets.map((ticket) => (
           <div
             key={ticket.id}
-            className={`flex items-center justify-between p-3 ${darkMode ? 'bg-zinc-800/50' : 'bg-gray-50'} rounded-xl mb-2`}
+            className={`flex items-center justify-between p-3 ${darkMode ? "bg-zinc-800/50" : "bg-gray-50"} rounded-xl mb-2`}
           >
             <div>
-              <p className={darkMode ? 'text-white' : 'text-gray-900'}>{ticket.subject}</p>
+              <p className={darkMode ? "text-white" : "text-gray-900"}>
+                {ticket.subject}
+              </p>
               <div className="flex items-center gap-3 mt-1">
-                <span className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{ticket.date}</span>
-                <span className={darkMode ? 'text-zinc-500' : 'text-gray-400'}>•</span>
-                <span className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{ticket.category}</span>
+                <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  {ticket.date}
+                </span>
+                <span className={darkMode ? "text-zinc-500" : "text-gray-400"}>
+                  •
+                </span>
+                <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  {ticket.category}
+                </span>
               </div>
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
-              ticket.status === "open"
-                ? darkMode ? "bg-red-500/20 text-red-400 border-red-500/20" : "bg-red-50 text-red-600 border-red-200"
-                : ticket.status === "in-progress"
-                ? darkMode ? "bg-amber-500/20 text-amber-400 border-amber-500/20" : "bg-amber-50 text-amber-600 border-amber-200"
-                : darkMode ? "bg-green-500/20 text-green-400 border-green-500/20" : "bg-green-50 text-green-600 border-green-200"
-            }`}>
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                ticket.status === "open"
+                  ? darkMode
+                    ? "bg-red-500/20 text-red-400 border-red-500/20"
+                    : "bg-red-50 text-red-600 border-red-200"
+                  : ticket.status === "in-progress"
+                    ? darkMode
+                      ? "bg-amber-500/20 text-amber-400 border-amber-500/20"
+                      : "bg-amber-50 text-amber-600 border-amber-200"
+                    : darkMode
+                      ? "bg-green-500/20 text-green-400 border-green-500/20"
+                      : "bg-green-50 text-green-600 border-green-200"
+              }`}
+            >
               {ticket.status}
             </span>
           </div>
@@ -678,25 +897,33 @@ export default function Dashboard() {
       </div>
 
       {/* Ticket Form */}
-      <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
-        <h3 className={darkMode ? 'text-white' : 'text-gray-900'}>Submit a Ticket</h3>
+      <div
+        className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+      >
+        <h3 className={darkMode ? "text-white" : "text-gray-900"}>
+          Submit a Ticket
+        </h3>
         <form className="space-y-4 mt-4">
           <div>
-            <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Subject</label>
+            <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+              Subject
+            </label>
             <input
               type="text"
               value={supportSubject}
               onChange={(e) => setSupportSubject(e.target.value)}
               placeholder="Brief description of your issue"
-              className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500' : 'bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+              className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
             />
           </div>
           <div>
-            <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Category</label>
+            <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+              Category
+            </label>
             <select
               value={supportCategory}
               onChange={(e) => setSupportCategory(e.target.value)}
-              className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+              className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
             >
               <option value="general">General Inquiry</option>
               <option value="investment">Investment</option>
@@ -706,13 +933,15 @@ export default function Dashboard() {
             </select>
           </div>
           <div>
-            <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Message</label>
+            <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+              Message
+            </label>
             <textarea
               value={supportMessage}
               onChange={(e) => setSupportMessage(e.target.value)}
               placeholder="Describe your issue in detail..."
               rows={4}
-              className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500' : 'bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
+              className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
             />
           </div>
           <button className="w-full px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-colors flex items-center justify-center gap-2">
@@ -727,31 +956,49 @@ export default function Dashboard() {
   const renderProfile = () => (
     <div className="space-y-6">
       <div>
-        <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Profile</h1>
-        <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Manage your account settings</p>
+        <h1
+          className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+        >
+          Profile
+        </h1>
+        <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+          Manage your account settings
+        </p>
       </div>
 
       {/* Profile Hero */}
-      <div className={`bg-gradient-to-br ${darkMode ? 'from-amber-500/10 via-amber-600/5 to-transparent border-amber-500/20' : 'from-amber-50 via-amber-100/5 to-white border-amber-200'} border rounded-2xl p-8`}>
+      <div
+        className={`bg-gradient-to-br ${darkMode ? "from-amber-500/10 via-amber-600/5 to-transparent border-amber-500/20" : "from-amber-50 via-amber-100/5 to-white border-amber-200"} border rounded-2xl p-8`}
+      >
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-3xl font-bold text-white">
             {userData.avatar}
           </div>
           <div className="flex-1">
-            <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{userData.name}</h2>
-            <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>{userData.email}</p>
+            <h2
+              className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+            >
+              {userData.name}
+            </h2>
+            <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+              {userData.email}
+            </p>
             <div className="flex flex-wrap items-center gap-3 mt-2">
-              <span className={`px-3 py-1 ${darkMode ? 'bg-amber-500/20 text-amber-400 border-amber-500/20' : 'bg-amber-50 text-amber-600 border-amber-200'} rounded-full text-xs font-medium border`}>
+              <span
+                className={`px-3 py-1 ${darkMode ? "bg-amber-500/20 text-amber-400 border-amber-500/20" : "bg-amber-50 text-amber-600 border-amber-200"} rounded-full text-xs font-medium border`}
+              >
                 {userData.tier}
               </span>
-              <span className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Joined {userData.joinedDate}</span>
+              <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Joined {userData.joinedDate}
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className={`px-4 py-2 ${darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'} rounded-xl text-sm transition-colors flex items-center gap-2`}
+                className={`px-4 py-2 ${darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"} rounded-xl text-sm transition-colors flex items-center gap-2`}
               >
                 <Edit className="w-4 h-4" />
                 Edit Profile
@@ -762,7 +1009,9 @@ export default function Dashboard() {
       </div>
 
       {/* Profile Sub-tabs */}
-      <div className={`flex gap-2 border-b ${darkMode ? 'border-zinc-800' : 'border-gray-200'}`}>
+      <div
+        className={`flex gap-2 border-b ${darkMode ? "border-zinc-800" : "border-gray-200"}`}
+      >
         {["overview", "edit", "statistics"].map((tab) => (
           <button
             key={tab}
@@ -773,7 +1022,9 @@ export default function Dashboard() {
             className={`px-4 py-2 text-sm font-medium transition-all border-b-2 ${
               profileSubTab === tab
                 ? "text-amber-500 border-amber-500"
-                : darkMode ? "text-zinc-400 border-transparent hover:text-zinc-300" : "text-gray-500 border-transparent hover:text-gray-700"
+                : darkMode
+                  ? "text-zinc-400 border-transparent hover:text-zinc-300"
+                  : "text-gray-500 border-transparent hover:text-gray-700"
             }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -784,83 +1035,119 @@ export default function Dashboard() {
       {/* Profile Content */}
       <div>
         {profileSubTab === "overview" && (
-          <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6 space-y-4`}>
+          <div
+            className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 space-y-4`}
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Full Name</p>
-                <p className={darkMode ? 'text-white' : 'text-gray-900'}>{profileData.name}</p>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Full Name
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.name}
+                </p>
               </div>
               <div>
-                <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Email</p>
-                <p className={darkMode ? 'text-white' : 'text-gray-900'}>{profileData.email}</p>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Email
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.email}
+                </p>
               </div>
               <div>
-                <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Phone</p>
-                <p className={darkMode ? 'text-white' : 'text-gray-900'}>{profileData.phone}</p>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Phone
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.phone}
+                </p>
               </div>
               <div>
-                <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Address</p>
-                <p className={darkMode ? 'text-white' : 'text-gray-900'}>{profileData.address}</p>
+                <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                  Address
+                </p>
+                <p className={darkMode ? "text-white" : "text-gray-900"}>
+                  {profileData.address}
+                </p>
               </div>
             </div>
-            <div className={`pt-4 ${darkMode ? 'border-t border-zinc-800' : 'border-t border-gray-200'}`}>
-              <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Bio</p>
-              <p className={darkMode ? 'text-white' : 'text-gray-900'}>{profileData.bio}</p>
+            <div
+              className={`pt-4 ${darkMode ? "border-t border-zinc-800" : "border-t border-gray-200"}`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Bio
+              </p>
+              <p className={darkMode ? "text-white" : "text-gray-900"}>
+                {profileData.bio}
+              </p>
             </div>
           </div>
         )}
 
         {profileSubTab === "edit" && (
-          <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
+          <div
+            className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6`}
+          >
             <form className="space-y-4">
               <div>
-                <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Full Name</label>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Full Name
+                </label>
                 <input
                   type="text"
                   name="name"
                   value={profileData.name}
                   onChange={handleProfileChange}
-                  className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
                 />
               </div>
               <div>
-                <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Email</label>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
                   value={profileData.email}
                   onChange={handleProfileChange}
-                  className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
                 />
               </div>
               <div>
-                <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Phone</label>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Phone
+                </label>
                 <input
                   type="tel"
                   name="phone"
                   value={profileData.phone}
                   onChange={handleProfileChange}
-                  className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
                 />
               </div>
               <div>
-                <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Address</label>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Address
+                </label>
                 <input
                   type="text"
                   name="address"
                   value={profileData.address}
                   onChange={handleProfileChange}
-                  className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
                 />
               </div>
               <div>
-                <label className={darkMode ? 'text-zinc-400' : 'text-gray-600'}>Bio</label>
+                <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
+                  Bio
+                </label>
                 <textarea
                   name="bio"
                   value={profileData.bio}
                   onChange={handleProfileChange}
                   rows={3}
-                  className={`w-full ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
+                  className={`w-full ${darkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"} border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
                 />
               </div>
               <button
@@ -877,16 +1164,32 @@ export default function Dashboard() {
 
         {profileSubTab === "statistics" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6 text-center`}>
-              <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Total Invested</p>
-              <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mt-1`}>$245,000</p>
+            <div
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 text-center`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Total Invested
+              </p>
+              <p
+                className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mt-1`}
+              >
+                $245,000
+              </p>
             </div>
-            <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6 text-center`}>
-              <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>Total Returns</p>
+            <div
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 text-center`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                Total Returns
+              </p>
               <p className="text-2xl font-bold text-green-500 mt-1">$68,400</p>
             </div>
-            <div className={`${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-gray-200'} border rounded-2xl p-6 text-center`}>
-              <p className={darkMode ? 'text-zinc-400' : 'text-gray-500'}>ROI</p>
+            <div
+              className={`${darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-gray-200"} border rounded-2xl p-6 text-center`}
+            >
+              <p className={darkMode ? "text-zinc-400" : "text-gray-500"}>
+                ROI
+              </p>
               <p className="text-2xl font-bold text-amber-500 mt-1">27.9%</p>
             </div>
           </div>
@@ -900,20 +1203,30 @@ export default function Dashboard() {
       {/* ====== SIDEBAR ====== */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 ${
-          darkMode ? "bg-zinc-950 border-r border-zinc-800" : "bg-white border-r border-gray-200"
+          darkMode
+            ? "bg-zinc-950 border-r border-zinc-800"
+            : "bg-white border-r border-gray-200"
         } z-50 transform transition-transform duration-300 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className={`flex items-center gap-3 p-6 ${darkMode ? 'border-b border-zinc-800' : 'border-b border-gray-200'}`}>
-            <div className="bg-gradient-to-br from-amber-400 to-amber-600 p-2 rounded-xl">
-              <span className="text-white font-bold text-xl">A</span>
+          <div
+            className={`flex items-center gap-3 p-6 ${darkMode ? "border-b border-zinc-800" : "border-b border-gray-200"}`}
+          >
+            <div className="bg-linear-to-br from-amber-400 to-amber-600 text-black p-1.5 rounded-xl shadow-lg shadow-amber-500/10">
+              <img src={afriTech} alt="" className="w-10 h-7 rounded-md" />
             </div>
             <div>
-              <span className={`font-bold text-lg ${darkMode ? "text-white" : "text-gray-900"}`}>AfriTek</span>
-              <span className="block text-[10px] text-amber-500 uppercase tracking-wider">Investor Portal</span>
+              <span
+                className={`font-bold text-lg ${darkMode ? "text-white" : "text-gray-900"}`}
+              >
+                AfriTek
+              </span>
+              <span className="block text-[10px] text-amber-500 uppercase tracking-wider">
+                Investor Portal
+              </span>
             </div>
           </div>
 
@@ -931,37 +1244,53 @@ export default function Dashboard() {
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                     isActive
-                      ? darkMode 
+                      ? darkMode
                         ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                         : "bg-amber-50 text-amber-600 border border-amber-200"
-                      : darkMode 
+                      : darkMode
                         ? "text-zinc-400 hover:bg-zinc-800/50"
                         : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-medium text-sm">{tab.label}</span>
-                  {isActive && <div className={`ml-auto w-1.5 h-8 rounded-full ${darkMode ? 'bg-amber-400' : 'bg-amber-500'}`} />}
+                  {isActive && (
+                    <div
+                      className={`ml-auto w-1.5 h-8 rounded-full ${darkMode ? "bg-amber-400" : "bg-amber-500"}`}
+                    />
+                  )}
                 </button>
               );
             })}
           </nav>
 
           {/* Bottom */}
-          <div className={`p-4 ${darkMode ? 'border-t border-zinc-800' : 'border-t border-gray-200'} space-y-3`}>
+          <div
+            className={`p-4 ${darkMode ? "border-t border-zinc-800" : "border-t border-gray-200"} space-y-3`}
+          >
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
-                darkMode ? "hover:bg-zinc-800 text-zinc-400" : "hover:bg-gray-100 text-gray-600"
+                darkMode
+                  ? "hover:bg-zinc-800 text-zinc-400"
+                  : "hover:bg-gray-100 text-gray-600"
               }`}
             >
-              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              <span className="text-sm">{darkMode ? "Light Mode" : "Dark Mode"}</span>
+              {darkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+              <span className="text-sm">
+                {darkMode ? "Light Mode" : "Dark Mode"}
+              </span>
             </button>
             <button
               onClick={() => window.location.reload()}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
-                darkMode ? "hover:bg-zinc-800 text-red-400" : "hover:bg-gray-100 text-red-500"
+                darkMode
+                  ? "hover:bg-zinc-800 text-red-400"
+                  : "hover:bg-gray-100 text-red-500"
               }`}
             >
               <LogOut className="w-5 h-5" />
@@ -974,18 +1303,27 @@ export default function Dashboard() {
       {/* ====== MOBILE HEADER ====== */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 ${
-          darkMode ? "bg-zinc-950/90 border-b border-zinc-800" : "bg-white/90 border-b border-gray-200"
+          darkMode
+            ? "bg-zinc-950/90 border-b border-zinc-800"
+            : "bg-white/90 border-b border-gray-200"
         } backdrop-blur-xl lg:hidden`}
       >
         <div className="flex items-center justify-between p-4">
-          <button onClick={() => setSidebarOpen(true)} className={`p-2 rounded-xl ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-100'} transition-colors`}>
-            <Menu className={darkMode ? 'text-white' : 'text-gray-900'} />
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className={`p-2 rounded-xl ${darkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"} transition-colors`}
+          >
+            <Menu className={darkMode ? "text-white" : "text-gray-900"} />
           </button>
           <div className="flex items-center gap-2">
             <div className="bg-gradient-to-br from-amber-400 to-amber-600 p-1.5 rounded-lg">
               <span className="text-white font-bold text-sm">A</span>
             </div>
-            <span className={`font-bold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>AfriTek</span>
+            <span
+              className={`font-bold text-sm ${darkMode ? "text-white" : "text-gray-900"}`}
+            >
+              AfriTek
+            </span>
           </div>
           <div className="w-10" />
         </div>
@@ -1005,7 +1343,9 @@ export default function Dashboard() {
       {/* ====== MOBILE BOTTOM NAV ====== */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-40 ${
-          darkMode ? "bg-zinc-950 border-t border-zinc-800" : "bg-white border-t border-gray-200"
+          darkMode
+            ? "bg-zinc-950 border-t border-zinc-800"
+            : "bg-white border-t border-gray-200"
         } lg:hidden`}
       >
         <div className="flex items-center justify-around p-2">
@@ -1017,7 +1357,11 @@ export default function Dashboard() {
                 key={tab.id}
                 onClick={() => setCurrentTab(tab.id)}
                 className={`flex flex-col items-center gap-0.5 p-2 rounded-xl transition-all ${
-                  isActive ? "text-amber-500" : darkMode ? "text-zinc-500" : "text-gray-500"
+                  isActive
+                    ? "text-amber-500"
+                    : darkMode
+                      ? "text-zinc-500"
+                      : "text-gray-500"
                 }`}
               >
                 <Icon className="w-5 h-5" />

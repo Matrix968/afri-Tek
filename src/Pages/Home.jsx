@@ -260,7 +260,7 @@ export default function AfriTekbileLanding() {
     },
     {
       name: "Login",
-      href: "/",
+      href: "/login",
     },
   ];
 

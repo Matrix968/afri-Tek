@@ -101,7 +101,7 @@ export default function AuthScreen() {
       setIsLoading(false);
       console.log("Signing in with:", signInData);
       // Handle sign in logic
-      navigate("/home");
+      navigate("/dashboard");
     }, 2500);
   };
 
