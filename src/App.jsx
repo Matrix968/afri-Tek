@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { ProtectedRoute } from "./routes/protectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import AfriTekbileLanding from "./Pages/Home";
 import AuthScreen from "./components/auth";
-import Dashboard from "./Client_Dashboard/Dashboard";
+import Dashboard from "./components/dashboard";
 import VerifyEmail from "./components/VerifyEmail";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
