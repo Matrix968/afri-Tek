@@ -4,7 +4,7 @@ import { ProtectedRoute } from "./routes/protectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import AfriTekbileLanding from "./Pages/Home";
 import AuthScreen from "./components/auth";
-import Dashboard from "./components/dashboard";
+import Dashboard from "./Client_Dashboard/dashboard"
 import VerifyEmail from "./components/VerifyEmail";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
