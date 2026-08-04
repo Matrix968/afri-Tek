@@ -13,18 +13,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, "/api/v1/auth"),
-        // Add these options to handle CORS better
-        headers: {
-          Origin: "https://afritek-mdr1.vercel.app",
-        },
         configure: (proxy) => {
           proxy.on("error", (err) => {
             console.log("Proxy error:", err);
           });
           proxy.on("proxyReq", (proxyReq, req) => {
-            // Remove problematic headers
-            proxyReq.removeHeader("Origin");
-            proxyReq.removeHeader("Referer");
             console.log(
               "🔄 Proxying:",
               req.method,
