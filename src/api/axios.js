@@ -1,9 +1,10 @@
 import axios from "axios";
 
-// Get the API URL from environment variables
-const API_URL = import.meta.env.VITE_API_URL || "/api";
-
-console.log("🔧 API URL:", API_URL); // This will help debug
+// Use relative URL in production (will use Vercel proxy)
+// src/api/axios.js
+const API_URL = import.meta.env.PROD
+  ? "https://cors-anywhere.herokuapp.com/https://afritek-mdr1.vercel.app/api/v1/auth"
+  : "/api";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -13,7 +14,7 @@ const api = axios.create({
   timeout: 30000,
 });
 
-// Request interceptor - Add token to all requests
+// Request interceptor
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -24,7 +25,6 @@ api.interceptors.request.use(
       `🚀 ${config.method.toUpperCase()} Request to:`,
       config.baseURL + config.url,
     );
-    console.log("📦 Request data:", config.data);
     return config;
   },
   (error) => {
@@ -33,7 +33,7 @@ api.interceptors.request.use(
   },
 );
 
-// Response interceptor - Handle token expiration
+// Response interceptor
 api.interceptors.response.use(
   (response) => {
     console.log(`✅ Response from ${response.config.url}:`, response.status);
@@ -42,7 +42,6 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // If error is 401 (Unauthorized) and not already retrying
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
@@ -67,12 +66,6 @@ api.interceptors.response.use(
     }
 
     console.error("❌ Response Error:", error);
-    if (error.response) {
-      console.error("Response data:", error.response.data);
-      console.error("Response status:", error.response.status);
-    } else if (error.request) {
-      console.error("No response received - Network Error");
-    }
     return Promise.reject(error);
   },
 );
