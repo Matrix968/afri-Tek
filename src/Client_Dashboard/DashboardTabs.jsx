@@ -24,13 +24,15 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Check,
+  XCircle,
 } from "lucide-react";
+import { updateProfile } from "../api/authApi";
 
 // ==================== OVERVIEW TAB ====================
-export const OverviewTab = ({ darkMode }) => {
+export const OverviewTab = ({ darkMode, user }) => {
   const userData = {
-    name: "John AfriTek",
-    tier: "Gold Investor",
+    name: user?.fullName || "John AfriTek",
+    tier: user?.role === "admin" ? "Gold Investor" : "Investor",
   };
 
   const stats = [
@@ -310,7 +312,7 @@ export const OverviewTab = ({ darkMode }) => {
 };
 
 // ==================== PORTFOLIO TAB ====================
-export const PortfolioTab = ({ darkMode }) => {
+export const PortfolioTab = ({ darkMode, user }) => {
   const investments = [
     {
       id: 1,
@@ -536,7 +538,7 @@ export const PortfolioTab = ({ darkMode }) => {
 };
 
 // ==================== DIVIDENDS TAB ====================
-export const DividendsTab = ({ darkMode }) => {
+export const DividendsTab = ({ darkMode, user }) => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
 
   const dividendTransactions = [
@@ -753,7 +755,7 @@ export const DividendsTab = ({ darkMode }) => {
 };
 
 // ==================== SUPPORT TAB ====================
-export const SupportTab = ({ darkMode }) => {
+export const SupportTab = ({ darkMode, user }) => {
   const [supportSubject, setSupportSubject] = useState("");
   const [supportMessage, setSupportMessage] = useState("");
   const [supportCategory, setSupportCategory] = useState("general");
@@ -897,7 +899,7 @@ export const SupportTab = ({ darkMode }) => {
         <h3 className={darkMode ? "text-white" : "text-gray-900"}>
           Submit a Ticket
         </h3>
-        <form className="space-y-4 mt-4">
+        <form className="space-y-4 mt-4" onSubmit={(e) => e.preventDefault()}>
           <div>
             <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
               Subject
@@ -961,23 +963,28 @@ export const SupportTab = ({ darkMode }) => {
 };
 
 // ==================== PROFILE TAB ====================
-export const ProfileTab = ({ darkMode }) => {
+export const ProfileTab = ({ darkMode, user, onProfileUpdate }) => {
   const [profileSubTab, setProfileSubTab] = useState("overview");
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
   const [profileData, setProfileData] = useState({
-    name: "John AfriTek",
-    email: "john@afritek.com",
-    phone: "+1 (555) 123-4567",
+    fullName: user?.fullName || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
     address: "123 Tech Street, Lagos, Nigeria",
     bio: "Passionate investor in African tech innovation. Believer in the future of blockchain and AI.",
   });
 
   const userData = {
-    name: "John AfriTek",
-    email: "john@afritek.com",
-    tier: "Gold Investor",
+    name: user?.fullName || "User",
+    email: user?.email || "",
+    tier: user?.role === "admin" ? "Gold Investor" : "Investor",
     joinedDate: "January 2025",
-    avatar: "JA",
+    avatar: user?.fullName?.charAt(0) || "U",
+    isVerified: user?.isVerified || false,
   };
 
   const handleProfileChange = (e) => {
@@ -985,8 +992,31 @@ export const ProfileTab = ({ darkMode }) => {
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSaveProfile = () => {
-    setIsEditing(false);
+  const handleSaveProfile = async () => {
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await updateProfile(token, {
+        fullName: profileData.fullName,
+        phone: profileData.phone,
+      });
+
+      if (response.success) {
+        setSuccess("Profile updated successfully!");
+        setIsEditing(false);
+        if (onProfileUpdate) onProfileUpdate();
+        setTimeout(() => setSuccess(""), 3000);
+      } else {
+        setError(response.message || "Failed to update profile");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update profile");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -1036,6 +1066,15 @@ export const ProfileTab = ({ darkMode }) => {
               <span className={darkMode ? "text-zinc-400" : "text-gray-500"}>
                 Joined {userData.joinedDate}
               </span>
+              {userData.isVerified ? (
+                <span className="text-green-500 text-xs flex items-center gap-1">
+                  <Check className="w-4 h-4" /> Verified
+                </span>
+              ) : (
+                <span className="text-yellow-500 text-xs flex items-center gap-1">
+                  <Clock className="w-4 h-4" /> Unverified
+                </span>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -1055,6 +1094,20 @@ export const ProfileTab = ({ darkMode }) => {
           </div>
         </div>
       </div>
+
+      {/* Success/Error Messages */}
+      {success && (
+        <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center gap-2">
+          <Check className="w-4 h-4 text-green-400" />
+          <p className="text-green-400 text-sm">{success}</p>
+        </div>
+      )}
+      {error && (
+        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2">
+          <XCircle className="w-4 h-4 text-red-400" />
+          <p className="text-red-400 text-sm">{error}</p>
+        </div>
+      )}
 
       {/* Profile Sub-tabs */}
       <div
@@ -1096,7 +1149,7 @@ export const ProfileTab = ({ darkMode }) => {
                   Full Name
                 </p>
                 <p className={darkMode ? "text-white" : "text-gray-900"}>
-                  {profileData.name}
+                  {profileData.fullName}
                 </p>
               </div>
               <div>
@@ -1145,15 +1198,15 @@ export const ProfileTab = ({ darkMode }) => {
                 : "bg-white border-gray-200"
             } border rounded-2xl p-6`}
           >
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
                   Full Name
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={profileData.name}
+                  name="fullName"
+                  value={profileData.fullName}
                   onChange={handleProfileChange}
                   className={`w-full ${
                     darkMode
@@ -1170,13 +1223,16 @@ export const ProfileTab = ({ darkMode }) => {
                   type="email"
                   name="email"
                   value={profileData.email}
-                  onChange={handleProfileChange}
+                  disabled
                   className={`w-full ${
                     darkMode
-                      ? "bg-zinc-800 border-zinc-700 text-white"
-                      : "bg-gray-50 border-gray-200 text-gray-900"
-                  } border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors`}
+                      ? "bg-zinc-800 border-zinc-700 text-zinc-500"
+                      : "bg-gray-50 border-gray-200 text-gray-500"
+                  } border rounded-xl px-4 py-3 outline-none cursor-not-allowed`}
                 />
+                <p className="text-xs text-zinc-500 mt-1">
+                  Email cannot be changed
+                </p>
               </div>
               <div>
                 <label className={darkMode ? "text-zinc-400" : "text-gray-600"}>
@@ -1226,14 +1282,46 @@ export const ProfileTab = ({ darkMode }) => {
                   } border rounded-xl px-4 py-3 outline-none focus:border-amber-400 transition-colors resize-none`}
                 />
               </div>
-              <button
-                type="button"
-                onClick={handleSaveProfile}
-                className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-colors flex items-center justify-center gap-2"
-              >
-                <Save className="w-4 h-4" />
-                Save Changes
-              </button>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleSaveProfile}
+                  disabled={isLoading}
+                  className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Saving...
+                    </span>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      Save Changes
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setProfileData({
+                      fullName: user?.fullName || "",
+                      email: user?.email || "",
+                      phone: user?.phone || "",
+                      address: "123 Tech Street, Lagos, Nigeria",
+                      bio: "Passionate investor in African tech innovation. Believer in the future of blockchain and AI.",
+                    });
+                  }}
+                  className={`px-6 py-3 ${
+                    darkMode
+                      ? "bg-zinc-800 hover:bg-zinc-700 text-white"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  } rounded-xl transition-colors`}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         )}

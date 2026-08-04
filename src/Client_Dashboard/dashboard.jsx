@@ -19,12 +19,14 @@ import {
   SupportTab,
   ProfileTab,
 } from "./DashboardTabs";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const tabs = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -33,6 +35,11 @@ export default function Dashboard() {
     { id: "support", label: "Support", icon: HelpCircle },
     { id: "profile", label: "Profile", icon: User },
   ];
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-[#030009]" : "bg-gray-50"}`}>
@@ -63,6 +70,27 @@ export default function Dashboard() {
               <span className="block text-[10px] text-amber-500 uppercase tracking-wider">
                 Investor Portal
               </span>
+            </div>
+          </div>
+
+          {/* User Info */}
+          <div
+            className={`p-4 ${darkMode ? "border-b border-zinc-800" : "border-b border-gray-200"}`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold">
+                {user?.fullName?.charAt(0) || "U"}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p
+                  className={`text-sm font-semibold truncate ${darkMode ? "text-white" : "text-gray-900"}`}
+                >
+                  {user?.fullName || "User"}
+                </p>
+                <p className="text-xs text-zinc-500 truncate">
+                  {user?.email || ""}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -122,7 +150,7 @@ export default function Dashboard() {
               </span>
             </button>
             <button
-              onClick={() => navigate("/login")}
+              onClick={handleLogout}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
                 darkMode
                   ? "hover:bg-zinc-800 text-red-400"
@@ -161,18 +189,37 @@ export default function Dashboard() {
               AfriTek
             </span>
           </div>
-          <div className="w-10" />
+          <button
+            onClick={handleLogout}
+            className={`p-2 rounded-xl ${darkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"} transition-colors`}
+          >
+            <LogOut className={darkMode ? "text-red-400" : "text-red-500"} />
+          </button>
         </div>
       </header>
 
       {/* ====== MAIN CONTENT ====== */}
       <main className={`lg:ml-64 pt-16 lg:pt-0 min-h-screen pb-24 lg:pb-0`}>
         <div className="p-4 md:p-8 max-w-7xl mx-auto">
-          {currentTab === "overview" && <OverviewTab darkMode={darkMode} />}
-          {currentTab === "portfolio" && <PortfolioTab darkMode={darkMode} />}
-          {currentTab === "dividends" && <DividendsTab darkMode={darkMode} />}
-          {currentTab === "support" && <SupportTab darkMode={darkMode} />}
-          {currentTab === "profile" && <ProfileTab darkMode={darkMode} />}
+          {currentTab === "overview" && (
+            <OverviewTab darkMode={darkMode} user={user} />
+          )}
+          {currentTab === "portfolio" && (
+            <PortfolioTab darkMode={darkMode} user={user} />
+          )}
+          {currentTab === "dividends" && (
+            <DividendsTab darkMode={darkMode} user={user} />
+          )}
+          {currentTab === "support" && (
+            <SupportTab darkMode={darkMode} user={user} />
+          )}
+          {currentTab === "profile" && (
+            <ProfileTab
+              darkMode={darkMode}
+              user={user}
+              onProfileUpdate={() => {}}
+            />
+          )}
         </div>
       </main>
 
