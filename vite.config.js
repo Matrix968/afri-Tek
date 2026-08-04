@@ -7,6 +7,7 @@ export default defineConfig({
   base: "/",
   server: {
     historyApiFallback: true,
+    // Add the proxy configuration here
     proxy: {
       "/api": {
         target: "https://afritek-mdr1.vercel.app",
