@@ -28,13 +28,12 @@ export default function SignIn({ setIsLoading, isLoading }) {
         console.log("✅ Login successful!");
         navigate("/dashboard");
       } else {
+        // Check if the error is about email verification
         if (
           result.message?.toLowerCase().includes("verify") ||
           result.message?.toLowerCase().includes("email")
         ) {
-          alert(
-            "Please verify your email before logging in. Check your inbox for the verification link.",
-          );
+          alert("Please verify your email before logging in.");
           navigate("/verify-email", {
             state: {
               email: signInData.email,
@@ -48,6 +47,8 @@ export default function SignIn({ setIsLoading, isLoading }) {
       }
     } catch (err) {
       console.error("❌ Login error:", err);
+
+      // Check for 403 - email not verified
       if (err.response?.status === 403) {
         alert("Please verify your email before logging in.");
         navigate("/verify-email", {
@@ -57,6 +58,10 @@ export default function SignIn({ setIsLoading, isLoading }) {
               "Your email is not verified. Please verify your email to login.",
           },
         });
+      } else if (err.response?.status === 429) {
+        alert(
+          "Too many login attempts. Please wait a few minutes and try again.",
+        );
       } else {
         alert(err.response?.data?.message || "Login failed");
       }

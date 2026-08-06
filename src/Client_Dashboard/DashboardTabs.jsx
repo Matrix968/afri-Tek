@@ -25,8 +25,10 @@ import {
   ArrowDownRight,
   Check,
   XCircle,
+  AlertTriangle,
 } from "lucide-react";
 import { updateProfile } from "../api/authApi";
+import DeleteAccountModal from "../components/DeleteAccountModal";
 
 // ==================== OVERVIEW TAB ====================
 export const OverviewTab = ({ darkMode, user }) => {
@@ -969,6 +971,7 @@ export const ProfileTab = ({ darkMode, user, onProfileUpdate }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [profileData, setProfileData] = useState({
     fullName: user?.fullName || "",
@@ -1371,6 +1374,44 @@ export const ProfileTab = ({ darkMode, user, onProfileUpdate }) => {
           </div>
         )}
       </div>
+
+      {/* ====== DELETE ACCOUNT SECTION ====== */}
+      <div
+        className={`${
+          darkMode
+            ? "bg-zinc-900/50 border-zinc-800"
+            : "bg-white border-gray-200"
+        } border rounded-2xl p-6`}
+      >
+        <div className="flex items-center gap-2 mb-1">
+          <AlertTriangle className={`w-5 h-5 text-red-500`} />
+          <h3
+            className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Danger Zone
+          </h3>
+        </div>
+        <p
+          className={`text-sm ${darkMode ? "text-zinc-400" : "text-gray-500"} mt-1`}
+        >
+          Permanently delete your account and all associated data. This action
+          cannot be undone.
+        </p>
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          className="mt-4 px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 font-medium rounded-xl transition-all duration-200 flex items-center gap-2"
+        >
+          <AlertTriangle className="w-4 h-4" />
+          Delete Account
+        </button>
+      </div>
+
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        darkMode={darkMode}
+      />
     </div>
   );
 };
